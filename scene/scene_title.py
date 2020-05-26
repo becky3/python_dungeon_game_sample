@@ -36,7 +36,12 @@ class SceneTitle(Scene):
 
         game_system = super().game_system
         game_system.fill_display()
-        image = Image("resource/image/title.png", (40, 60))
+        width, height = game_system.get_screen_size()
+
+        title_x = width / 2 - 64
+        title_y = height / 2 - 32
+
+        image = Image("resource/image/title.png", (title_x, title_y))
         game_system.add_draw_object(image)
 
         if hi_score_floor >= 2:
@@ -44,7 +49,7 @@ class SceneTitle(Scene):
             game_system.add_draw_object(
                 Text(
                     floor_text,
-                    (300, 460),
+                    (30, 46),
                     Color.CYAN
                 )
             )
