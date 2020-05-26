@@ -41,7 +41,7 @@ class MapManager:
         self.game_system.add_draw_object(
             Text(
                 floor_text,
-                (60, 40),
+                (8, 8),
                 Color.WHITE,
                 Text.FontSize.SMALL
             )
@@ -67,8 +67,8 @@ class MapManager:
         self.player.draw()
 
     def draw_parameter(self):  # 主人公の能力を表示
-        display_x = 30
-        display_y = 600
+        display_x = 8
+        display_y = 100
 
         game_system = self.game_system
         timer = game_system.timer
@@ -88,7 +88,7 @@ class MapManager:
         game_system.add_draw_object(
             Text(
                 life_text,
-                (display_x + 128, display_y + 6),
+                (display_x+8, display_y),
                 col,
                 Text.FontSize.SMALL
             )
@@ -96,7 +96,7 @@ class MapManager:
         game_system.add_draw_object(
             Text(
                 str(player.strength),
-                (display_x + 128, display_y + 33),
+                (display_x + 28, display_y + 16),
                 Color.WHITE,
                 Text.FontSize.SMALL
             )
@@ -107,7 +107,7 @@ class MapManager:
         game_system.add_draw_object(
             Text(
                 str(player.food),
-                (display_x + 128, display_y+60),
+                (display_x + 28, display_y+32),
                 col,
                 Text.FontSize.SMALL
             )
@@ -115,7 +115,7 @@ class MapManager:
         game_system.add_draw_object(
             Text(
                 str(player.potion),
-                (display_x + 266, display_y + 6),
+                (display_x + 66, display_y),
                 Color.WHITE,
                 Text.FontSize.SMALL
             )
@@ -123,7 +123,7 @@ class MapManager:
         game_system.add_draw_object(
             Text(
                 str(player.blazegem),
-                (display_x + 266, display_y+33),
+                (display_x + 66, display_y+16),
                 Color.WHITE,
                 Text.FontSize.SMALL
             )

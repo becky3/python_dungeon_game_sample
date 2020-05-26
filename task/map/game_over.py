@@ -5,7 +5,7 @@ from task.task import Task
 from const import Color, Direction
 from manager.sound_manager import Music
 from model.draw_object.text import Text
-from model.event.player import CharacterType
+from model.event.player import Player
 
 
 class GameOver(Task):
@@ -38,7 +38,7 @@ class GameOver(Task):
             ]
             player.set_direction(PL_TURN[timer % 4])
             if timer == 30:
-                player.set_character_type(CharacterType.DIE)
+                player.set_character_type(Player.CharacterType.DIE)
             mm.draw_map()
             mm.draw_parameter()
         elif timer == 31:

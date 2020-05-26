@@ -165,12 +165,3 @@ class EventManager:
                 enemy = self.__enemy_map[map_y, map_x]
                 if enemy is not None:
                     enemy.draw()
-
-        doc = "y[{} ~ {}], x[{} ~ {}]".format(
-            center_y + min_y,
-            center_y + max_y,
-            center_x + min_x,
-            center_x + max_x,
-        )
-        text = Text(doc, (10, 10), (255, 255, 255), is_absolute_position=True)
-        game_system.add_draw_object(text)

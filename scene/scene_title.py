@@ -44,7 +44,7 @@ class SceneTitle(Scene):
         image = Image("resource/image/title.png", (title_x, title_y))
         game_system.add_draw_object(image)
 
-        if hi_score_floor >= 0:  # 2:
+        if hi_score_floor >= 2:
             floor_text = "You reached floor {}.".format(hi_score_floor)
             game_system.add_draw_object(
                 Text(
