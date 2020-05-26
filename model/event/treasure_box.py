@@ -33,7 +33,7 @@ class TreasureBox(Event):
             Item.Type.FOOD_SPOILED,
             Item.Type.FOOD_SPOILED,
         ])
-        return Item(item_type)
+        return Item(self.__game_system, item_type)
 
     def __init__(self,
                  position: (int, int),
