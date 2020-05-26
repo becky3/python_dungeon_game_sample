@@ -167,7 +167,7 @@ class Enemy(Event):
 
         game_system = self.__game_system
         x = position[0]
-        y = position[1] + self.height - 16
+        y = position[1] + self.height - 8
         text = self.name
         # text = self.__debug_text
 
@@ -175,16 +175,10 @@ class Enemy(Event):
             text,
             (x, y),
             Color.RED,
-            is_absolute_position=False
-        )
-        text2 = Text(
-            text,
-            (x + 1, y + 1),
-            Color.RED,
+            font_size=Text.FontSize.SS,
             is_absolute_position=False
         )
         game_system.add_draw_object(text1)
-        game_system.add_draw_object(text2)
 
     def __get_image(self, index: int, position: (int, int)) -> Image:
         return Image(

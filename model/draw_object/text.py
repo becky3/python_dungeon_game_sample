@@ -7,6 +7,7 @@ class Text(DrawObject):
     class FontSize:
         NORMAL = 18
         SMALL = 15
+        SS = 12
 
     def __init__(self,
                  text: str,

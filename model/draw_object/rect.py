@@ -6,10 +6,6 @@ from model.draw_object.draw_object import DrawObject
 
 class Rect(DrawObject):
 
-    class FontSize:
-        NORMAL = 40
-        SMALL = 30
-
     def __init__(self,
                  position: (int, int),
                  size: (int, int),

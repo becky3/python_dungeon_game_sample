@@ -49,14 +49,14 @@ class SceneTitle(Scene):
             game_system.add_draw_object(
                 Text(
                     floor_text,
-                    (30, 46),
+                    (8, 8),
                     Color.CYAN
                 )
             )
         game_system.add_draw_object(
             Text(
                 "Press space key",
-                (320, 560),
+                (24, 112),
                 self.__BLINK[timer % 6]
             )
         )
