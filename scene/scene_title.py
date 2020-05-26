@@ -44,19 +44,19 @@ class SceneTitle(Scene):
         image = Image("resource/image/title.png", (title_x, title_y))
         game_system.add_draw_object(image)
 
-        if hi_score_floor >= 2:
+        if hi_score_floor >= 0:  # 2:
             floor_text = "You reached floor {}.".format(hi_score_floor)
             game_system.add_draw_object(
                 Text(
                     floor_text,
-                    (30, 46),
+                    (8, 8),
                     Color.CYAN
                 )
             )
         game_system.add_draw_object(
             Text(
                 "Press space key",
-                (320, 560),
+                (24, 112),
                 self.__BLINK[timer % 6]
             )
         )

@@ -74,12 +74,13 @@ class MapManager:
         timer = game_system.timer
         player = self.player
 
-        image = Image(
-            "resource/image/parameter.png",
-            (display_x, display_y),
-            is_absolute_position=True
-        )
-        game_system.add_draw_object(image)
+        # TODO: パラメータ表示
+        # image = Image(
+        #     "resource/image/parameter.png",
+        #     (display_x, display_y),
+        #     is_absolute_position=True
+        # )
+        # game_system.add_draw_object(image)
         col = Color.WHITE
         if player.life < 10 and timer % 2 == 0:
             col = Color.RED
