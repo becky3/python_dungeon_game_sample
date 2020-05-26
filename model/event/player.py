@@ -12,12 +12,11 @@ from model.character_chip import CharacterChip
 from model.event.event import Event
 
 
-class CharacterType:
-    NORMAL = 0
-    DIE = 1
-
-
 class Player(Event):
+
+    class CharacterType:
+        NORMAL = 0
+        DIE = 1
 
     __IMAGE = "resource/image/player.png"
 

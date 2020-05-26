@@ -31,6 +31,9 @@ class GameSystem():
         pygame.init()
         self.__clock = pygame.time.Clock()
 
+    def get_screen_size(self) -> (int, int):
+        return self.__camera.screen.get_size()
+
     def reset_camera(self):
         self.__camera.reset()
 

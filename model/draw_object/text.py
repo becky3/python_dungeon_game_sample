@@ -5,8 +5,8 @@ from model.draw_object.draw_object import DrawObject
 class Text(DrawObject):
 
     class FontSize:
-        NORMAL = 40
-        SMALL = 30
+        NORMAL = 18
+        SMALL = 15
 
     def __init__(self,
                  text: str,

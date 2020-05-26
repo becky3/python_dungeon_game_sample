@@ -35,20 +35,7 @@ class GetTreasureBox(Task):
 
         mm.draw_map()
         mm.draw_parameter()
-        image = Image(
-            item.image_file_path,
-            (320, 220),
-            is_absolute_position=True
-        )
-        game_system.add_draw_object(image)
-        game_system.add_draw_object(
-            Text(
-                item.name,
-                (380, 240),
-                Color.WHITE,
-                Text.FontSize.SMALL
-            )
-        )
+        item.draw()
 
     def exit(self):
         pass
