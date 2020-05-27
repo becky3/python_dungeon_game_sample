@@ -76,7 +76,7 @@ class Enemy(Event):
 
         self.__character_chip.set_character_no(0)
 
-    def __is_move(self, position: (int, int)) -> bool:
+    def __can_move(self, position: (int, int)) -> bool:
 
         event_map = self.__event_map
         floor_map = self.__dungeon.floor_map
@@ -90,6 +90,9 @@ class Enemy(Event):
             return False
 
         if event_map[y, x] is not None:
+            return False
+
+        if self.__player.map_coordinate == position:
             return False
 
         return True
@@ -132,7 +135,7 @@ class Enemy(Event):
         self.__anime_frame += 1
         new_position = self.__get_move_position()
 
-        if not self.__is_move(new_position):
+        if not self.__can_move(new_position):
             return
 
         self.set_position(new_position)

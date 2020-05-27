@@ -33,8 +33,7 @@ class MapManager:
         self.event_manager.create_events(dungeon)
 
     def draw_floor_info(self):
-        floor_text = "floor {} ({},{})".format(
-            self.game_info.floor,
+        floor_text = "({},{})".format(
             self.player.x,
             self.player.y
         )

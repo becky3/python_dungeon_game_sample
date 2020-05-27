@@ -1,11 +1,13 @@
 from typing import Optional
 
 from manager.map_manager import MapManager
+from manager.sound_manager import SE
 from task.task import Task
 from const import Color
 from model.draw_object.image import Image
 from model.draw_object.text import Text
 from model.event.treasure_box import TreasureBox
+from model.item import Item
 
 
 class GetTreasureBox(Task):
@@ -16,10 +18,15 @@ class GetTreasureBox(Task):
         self.__treasure_box = treasure_box
 
     def start(self):
-        self.__map_manager.player.add_item(
-            self.__treasure_box.get_item()
-        )
-        self.__map_manager.event_manager.remove_treasure(
+        item = self.__treasure_box.get_item()
+        se = SE.GOOD_ITEM
+        if item.item_type == Item.Type.FOOD_SPOILED:
+            se = SE.BAD_ITEM
+
+        mm = self.__map_manager
+        mm.game_system.play_se(se)
+        mm.player.add_item(item)
+        mm.event_manager.remove_treasure(
             self.__treasure_box
         )
 

@@ -84,7 +84,7 @@ class SceneMap(Scene):
             self.__task = task
             self.__map_manager.game_system.reset_timer()
             task.start()
-            # print("task:" + task.__class__.__name__)
+            print("task:" + task.__class__.__name__)
 
         if isinstance(next_task, SceneToTitle):
             self.__next_scene = SceneTitle()

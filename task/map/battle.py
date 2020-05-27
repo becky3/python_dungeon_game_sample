@@ -6,10 +6,11 @@ from manager.sound_manager import SE
 from task.task import Task
 
 
-class ActionEvent(Task):
+class Battle(Task):
 
-    def __init__(self, map_manager: MapManager):
+    def __init__(self, map_manager: MapManager, enemy: Enemy):
         self.__map_manager = map_manager
+        self.__enemy = enemy
         self.__next_task = None
 
     def start(self):
@@ -22,21 +23,16 @@ class ActionEvent(Task):
         player = mm.player
         game_system = mm.game_system
 
-        event = event_manager.current_event
-        if event is None:
-            from task.map.input_wait import InputWait
-            self.__next_task = InputWait(self.__map_manager)
-            return
+        enemy = self.__enemy
 
-        if isinstance(event, Enemy):
-            event.damage()
+        enemy.damage()
+
+        if enemy.is_die():
+            game_system.play_se(SE.ENEMY_DOWN)
+            event_manager.remove_enemy(enemy)
+        else:
             game_system.play_se(SE.ATTACK)
-
-            if event.is_die():
-                event_manager.remove_event(event)
-            else:
-                player.back()
-            return
+            player.back()
 
         from task.map.input_wait import InputWait
         self.__next_task = InputWait(self.__map_manager)

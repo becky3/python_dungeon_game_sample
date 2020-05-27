@@ -1,6 +1,7 @@
 from typing import Optional
 
 from manager.map_manager import MapManager
+from manager.sound_manager import SE
 from task.task import Task
 from model.draw_object.rect import Rect
 
@@ -12,7 +13,9 @@ class ChangeFloor(Task):
         self.__next_task: Task = None
 
     def start(self):
-        pass
+        self.__map_manager.game_system.play_se(
+            SE.CHANGE_FLOOR
+        )
 
     def update(self):
 
