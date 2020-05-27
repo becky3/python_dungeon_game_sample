@@ -4,6 +4,7 @@ from model.dungeon import Dungeon
 from model.event.player import Player
 from model.draw_object.image import Image
 from model.draw_object.text import Text
+from model.draw_object.rect import Rect
 from manager.event_manager import EventManager
 from game.game_info import GameInfo
 from game.game_system import GameSystem
@@ -66,65 +67,95 @@ class MapManager:
         )
         self.player.draw()
 
-    def draw_parameter(self):  # 主人公の能力を表示
-        display_x = 8
-        display_y = 100
+    def __draw_floor_info(self, base_position: (int, int)):
 
-        game_system = self.game_system
-        timer = game_system.timer
+        x, y = base_position
+        floor = self.game_info.floor
         player = self.player
 
-        # TODO: パラメータ表示
-        # image = Image(
-        #     "resource/image/parameter.png",
-        #     (display_x, display_y),
-        #     is_absolute_position=True
-        # )
-        # game_system.add_draw_object(image)
-        col = Color.WHITE
-        if player.life < 10 and timer % 2 == 0:
-            col = Color.RED
-        life_text = "{}/{}".format(player.life, player.max_life)
-        game_system.add_draw_object(
+        texts = [
+            "B{}F".format(floor),
+            "LV {}".format(player.level),
+        ]
+
+        text = "  ".join(texts)
+
+        self.game_system.add_draw_object(
             Text(
-                life_text,
-                (display_x+8, display_y),
-                col,
+                text,
+                (x, y),
+                Color.CYAN,
                 Text.FontSize.SMALL
             )
         )
-        game_system.add_draw_object(
+
+    def __draw_player_info(self, base_position: (int, int)):
+
+        x, y = base_position
+
+        timer = self.game_system.timer
+        player = self.player
+
+        texts = [
+            "HP {}/{}".format(player.hp, player.max_hp),
+            "SA {}".format(player.satiation)
+        ]
+
+        text = " ".join(texts)
+        color = Color.WHITE
+        if player.hp / player.max_hp < 0.2 or player.hp <= 10:
+            color = Color.RED
+
+        self.game_system.add_draw_object(
             Text(
-                str(player.strength),
-                (display_x + 28, display_y + 16),
-                Color.WHITE,
+                text,
+                (x, y + 12),
+                color,
                 Text.FontSize.SMALL
             )
         )
-        col = Color.WHITE
-        if player.food == 0 and timer % 2 == 0:
-            col = Color.RED
-        game_system.add_draw_object(
+
+    def __draw_item_info(self, base_position: (int, int)):
+
+        x = base_position[0] + 96
+        y = base_position[1]
+
+        player = self.player
+
+        self.game_system.add_draw_object(
             Text(
-                str(player.food),
-                (display_x + 28, display_y+32),
-                col,
+                "[ P ] {}".format(player.potion),
+                (x, y),
+                Color.GREEN,
                 Text.FontSize.SMALL
             )
         )
-        game_system.add_draw_object(
+
+        self.game_system.add_draw_object(
             Text(
-                str(player.potion),
-                (display_x + 66, display_y),
-                Color.WHITE,
+                "[ F ] {}".format(player.blazegem),
+                (x, y + 12),
+                Color.GREEN,
                 Text.FontSize.SMALL
             )
         )
+
+    def draw_parameter(self):
+
+        base_x = 8
+        base_y = 120
+        base_position = (base_x, base_y)
+
+        game_system = self.game_system
+
         game_system.add_draw_object(
-            Text(
-                str(player.blazegem),
-                (display_x + 66, display_y+16),
-                Color.WHITE,
-                Text.FontSize.SMALL
+            Rect(
+                (0, base_y - 2),
+                (144, 144 - base_y + 2),
+                is_absolute_position=True
             )
         )
+
+        self.__draw_floor_info(base_position)
+        self.__draw_player_info(base_position)
+        self.__draw_item_info(base_position)
