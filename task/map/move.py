@@ -44,8 +44,11 @@ class Move(Task):
 
         treasure_box = event_manager.get_treasure_box(player.map_coordinate)
         if treasure_box is not None:
-            from task.map.get_treasure_box import GetTreasureBox
-            self.__next_task = GetTreasureBox(mm, treasure_box)
+            from task.map.get_item import GetItem
+            self.__next_task = GetItem(mm, treasure_box.get_item())
+            mm.event_manager.remove_treasure(
+                treasure_box
+            )
             return
 
         from task.map.input_wait import InputWait

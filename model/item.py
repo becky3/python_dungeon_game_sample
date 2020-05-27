@@ -39,16 +39,12 @@ class Item():
             is_absolute_position=True
         )
 
-    def __init__(self,
-                 game_system: GameSystem,
-                 item_type: int):
+    def __init__(self, item_type: int):
         self.__item_type = item_type
-        self.__game_system = game_system
         self.__name = self.__NAMES[self.__item_type]
 
-    def draw(self):
+    def draw(self, game_system: GameSystem):
 
-        game_system = self.__game_system
         width, height = game_system.get_screen_size()
 
         center_x = width / 2
@@ -57,8 +53,8 @@ class Item():
         image = self.__get_image(
             (center_x - 42, center_y - 36)
         )
-        self.__game_system.add_draw_object(image)
-        self.__game_system.add_draw_object(
+        game_system.add_draw_object(image)
+        game_system.add_draw_object(
             Text(
                 self.__name,
                 (center_x - 24, center_y - 32),

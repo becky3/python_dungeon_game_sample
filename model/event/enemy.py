@@ -1,3 +1,5 @@
+from typing import Optional
+
 import random
 import math
 
@@ -8,6 +10,7 @@ from game.game_info import GameInfo
 from game.game_system import GameSystem
 from model.dungeon import Dungeon
 from model.chip import Chip
+from model.item import Item
 from model.character_chip import CharacterChip
 from model.event.event import Event
 from model.event.player import Player
@@ -130,6 +133,21 @@ class Enemy(Event):
 
     def is_die(self) -> bool:
         return self.hp < 0
+
+    def get_item(self) -> Optional[Item]:
+
+        if random.random() < 0.7:
+            return None
+
+        item_type = random.choice([
+            Item.Type.FOOD_ADD_20,
+            Item.Type.FOOD_ADD_20,
+            Item.Type.FOOD_ADD_20,
+            Item.Type.FOOD_ADD_20,
+            Item.Type.FOOD_ADD_100,
+        ])
+
+        return Item(item_type)
 
     def update(self):
         self.__anime_frame += 1

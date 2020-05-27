@@ -29,13 +29,20 @@ class Battle(Task):
 
         if enemy.is_die():
             game_system.play_se(SE.ENEMY_DOWN)
+            item = enemy.get_item()
             event_manager.remove_enemy(enemy)
+
+            if item is not None:
+                from task.map.get_item import GetItem
+                self.__next_task = GetItem(mm, item)
+                return
+
         else:
             game_system.play_se(SE.ATTACK)
             player.back()
 
         from task.map.input_wait import InputWait
-        self.__next_task = InputWait(self.__map_manager)
+        self.__next_task = InputWait(mm)
 
     def draw(self):
         mm = self.__map_manager
