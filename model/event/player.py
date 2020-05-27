@@ -1,5 +1,5 @@
-import random
 
+import random
 
 from libs.matrix import Matrix
 from const import Direction
@@ -100,14 +100,13 @@ class Player(Event):
         self.__event_map = event_map
 
     def __hungry_by_move(self):
-        if self.__satiation > 0:
-            self.__satiation = self.__satiation - 1
-            if self.__hp < self.__max_hp:
-                self.__hp = self.__hp + 1
-        else:
-            self.__hp = self.__hp - 5
-            if self.__hp <= 0:
-                self.__hp = 0
+        if self.__satiation <= 0:
+            self.__add_hp(-5)
+            return
+
+        self.__satiation = self.__satiation - 1
+        if self.__hp < self.__max_hp:
+            self.__add_hp(1)
 
     def is_die(self) -> bool:
         return self.__hp <= 0
@@ -212,6 +211,21 @@ class Player(Event):
     def __moved(self):
         self.set_position(self.__next_position)
         self.__next_position = None
+
+    def battle(self, enemy: object):
+        # 相互importとなるため、関数内部で型解決
+        from model.event.enemy import Enemy
+        _enemy: Enemy = enemy
+        damage = _enemy.strength + _enemy.level
+        self.__add_hp(-damage)
+
+    def __add_hp(self, value: int):
+        self.__hp += value
+        if self.__hp < 0:
+            self.__hp = 0
+
+        if self.__hp > self.__max_hp:
+            self.__hp = self.__max_hp
 
     def back(self):
         y, x = self.__pre_direction

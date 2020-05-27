@@ -9,7 +9,6 @@ from libs.matrix import Matrix
 from game.game_info import GameInfo
 from game.game_system import GameSystem
 from model.dungeon import Dungeon
-from model.chip import Chip
 from model.item import Item
 from model.character_chip import CharacterChip
 from model.event.event import Event
@@ -36,6 +35,26 @@ class Enemy(Event):
         "Twin killer",
         "Hell"
     ]
+
+    @property
+    def level(self) -> int:
+        return self.__level
+
+    @property
+    def name(self) -> int:
+        return self.__name
+
+    @property
+    def max_hp(self) -> int:
+        return self.__max_hp
+
+    @property
+    def hp(self) -> int:
+        return self.__hp
+
+    @property
+    def strength(self) -> int:
+        return self.__strength
 
     def __init__(self,
                  position: (int, int),
@@ -70,11 +89,11 @@ class Enemy(Event):
         if floor >= 10:
             self.type = random.randint(0, 9)
 
-        self.level = random.randint(1, floor)
-        self.name = str(self.level)
-        self.max_hp = 60 * (self.type + 1) + (self.level - 1) * 10
-        self.hp = self.max_hp
-        self.str = int(self.max_hp/8)
+        self.__level = random.randint(1, floor)
+        self.__name = str(self.level)
+        self.__max_hp = 60 * (self.type + 1) + (self.level - 1) * 10
+        self.__hp = self.max_hp
+        self.__strength = math.ceil(self.max_hp/8)
         self.__debug_text = "-"
 
         self.__character_chip.set_character_no(0)
@@ -103,7 +122,8 @@ class Enemy(Event):
     def __get_move_position(self) -> (int, int):
 
         reach_y, reach_x = self.__get_player_reach()
-        if abs(reach_y) <= self.__search_size and abs(reach_x) <= self.__search_size:
+        if abs(reach_y) <= self.__search_size \
+                and abs(reach_x) <= self.__search_size:
             param = (0, 0)
             if abs(reach_x) > abs(reach_y):
                 param = (self.y, self.x + (numpy.sign(reach_x) * -1))
@@ -127,9 +147,9 @@ class Enemy(Event):
         y = self.y - player_y
         return (y, x)
 
-    def damage(self):
+    def battle(self):
         damage = self.__player.strength + self.__player.level
-        self.hp -= damage
+        self.__hp -= damage
 
     def is_die(self) -> bool:
         return self.hp < 0
