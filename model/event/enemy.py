@@ -1,3 +1,5 @@
+from typing import Optional
+
 import random
 import math
 
@@ -8,6 +10,7 @@ from game.game_info import GameInfo
 from game.game_system import GameSystem
 from model.dungeon import Dungeon
 from model.chip import Chip
+from model.item import Item
 from model.character_chip import CharacterChip
 from model.event.event import Event
 from model.event.player import Player
@@ -76,7 +79,7 @@ class Enemy(Event):
 
         self.__character_chip.set_character_no(0)
 
-    def __is_move(self, position: (int, int)) -> bool:
+    def __can_move(self, position: (int, int)) -> bool:
 
         event_map = self.__event_map
         floor_map = self.__dungeon.floor_map
@@ -90,6 +93,9 @@ class Enemy(Event):
             return False
 
         if event_map[y, x] is not None:
+            return False
+
+        if self.__player.map_coordinate == position:
             return False
 
         return True
@@ -128,11 +134,26 @@ class Enemy(Event):
     def is_die(self) -> bool:
         return self.hp < 0
 
+    def get_item(self) -> Optional[Item]:
+
+        if random.random() < 0.7:
+            return None
+
+        item_type = random.choice([
+            Item.Type.FOOD_ADD_20,
+            Item.Type.FOOD_ADD_20,
+            Item.Type.FOOD_ADD_20,
+            Item.Type.FOOD_ADD_20,
+            Item.Type.FOOD_ADD_100,
+        ])
+
+        return Item(item_type)
+
     def update(self):
         self.__anime_frame += 1
         new_position = self.__get_move_position()
 
-        if not self.__is_move(new_position):
+        if not self.__can_move(new_position):
             return
 
         self.set_position(new_position)

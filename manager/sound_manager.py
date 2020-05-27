@@ -1,18 +1,23 @@
 import pygame
 
+from manager.resource_manager import ResourceManager
+
 
 class Music:
-    TITLE = "resource/sound/title.ogg"
-    DUNGEON = "resource/sound/title.ogg"
-    GAME_OVER = "resource/sound/title.ogg"
+    TITLE = "resource/music/title.ogg"
+    DUNGEON = "resource/music/title.ogg"
+    GAME_OVER = "resource/music/title.ogg"
 
 
 class SE:
-    ATTACK = ""
+    ATTACK = "resource/se/attack.wav"
+    ENEMY_DOWN = "resource/se/enemy_down.wav"
+    GOOD_ITEM = "resource/se/good_item.wav"
+    BAD_ITEM = "resource/se/bad_item.wav"
+    CHANGE_FLOOR = "resource/se/change_floor.wav"
     BOM = ""
     POTION = ""
     LEVEL_UP = ""
-    WIN = ""
 
 
 class SoundManager:
@@ -26,4 +31,4 @@ class SoundManager:
         pygame.mixer_music.stop()
 
     def play_se(self, file_path: str):
-        pygame.mixer.Sound(file_path).play()
+        ResourceManager.get_sound(file_path).play()

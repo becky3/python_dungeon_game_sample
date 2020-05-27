@@ -84,7 +84,7 @@ class SceneMap(Scene):
             self.__task = task
             self.__map_manager.game_system.reset_timer()
             task.start()
-            # print("task:" + task.__class__.__name__)
+            print("task:" + task.__class__.__name__)
 
         if isinstance(next_task, SceneToTitle):
             self.__next_scene = SceneTitle()
@@ -101,7 +101,7 @@ class SceneMap(Scene):
             game_system.add_draw_object(
                 Text(
                     welcome_text,
-                    (300, 180),
+                    (20, 40),
                     Color.CYAN
                 )
             )
@@ -109,7 +109,7 @@ class SceneMap(Scene):
         game_system.add_draw_object(
             Text(
                 speed_text,
-                (740, 40),
+                (100, 8),
                 Color.WHITE,
                 Text.FontSize.SMALL
             )

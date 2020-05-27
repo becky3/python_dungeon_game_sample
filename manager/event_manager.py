@@ -17,10 +17,6 @@ from model.draw_object.text import Text
 class EventManager:
 
     @property
-    def current_event(self) -> Optional[Event]:
-        return self.__current_event
-
-    @property
     def enemys(self) -> []:
         return self.__enemy_map.get_not_empty_values()
 
@@ -39,7 +35,6 @@ class EventManager:
         self.__enemy_map = Matrix()
         self.__treasure_map = Matrix()
         self.__stair: Stairs = None
-        self.__current_event: Event = None
 
     # is_dieをまとめて削除する
     def remove_enemy(self, event: Event):
@@ -60,6 +55,9 @@ class EventManager:
                 continue
             self.__enemy_map[enemy.map_coordinate] = enemy
             self.__enemy_map[old_position] = None
+
+    def get_enemy(self, position: (int, int)) -> Optional[Enemy]:
+        return self.__enemy_map[position]
 
     def get_treasure_box(self, position: (int, int)) -> Optional[TreasureBox]:
         return self.__treasure_map[position]

@@ -24,16 +24,9 @@ class TreasureBox(Event):
             Item.Type.BLAZE_GEM,
             Item.Type.BLAZE_GEM,
             Item.Type.BLAZE_GEM,
-            Item.Type.FOOD_ADD_20,
-            Item.Type.FOOD_ADD_20,
-            Item.Type.FOOD_ADD_20,
-            Item.Type.FOOD_ADD_20,
-            Item.Type.FOOD_ADD_100,
-            Item.Type.FOOD_ADD_100,
-            Item.Type.FOOD_SPOILED,
             Item.Type.FOOD_SPOILED,
         ])
-        return Item(self.__game_system, item_type)
+        return Item(item_type)
 
     def __init__(self,
                  position: (int, int),
