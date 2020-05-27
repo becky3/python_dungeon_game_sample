@@ -21,20 +21,24 @@ class Player(Event):
     __IMAGE = "resource/image/player.png"
 
     @property
-    def life(self) -> int:
-        return self.__life
+    def level(self) -> int:
+        return self.__level
 
     @property
-    def max_life(self) -> int:
-        return self.__max_life
+    def hp(self) -> int:
+        return self.__hp
+
+    @property
+    def max_hp(self) -> int:
+        return self.__max_hp
 
     @property
     def strength(self) -> int:
         return self.__strength
 
     @property
-    def food(self) -> int:
-        return self.__food
+    def satiation(self) -> int:
+        return self.__satiation
 
     @property
     def potion(self) -> int:
@@ -69,21 +73,21 @@ class Player(Event):
 
         self.__direction = 0
 
-        self.__food = 0
+        self.__satiation = 0
         self.__potion = 0
         self.__blazegem = 0
 
         self.__level = 0
-        self.__life = 0
-        self.__max_life = 0
+        self.__hp = 0
+        self.__max_hp = 0
         self.__strength = 0
 
     def reset_status(self):
         self.__level = 1
-        self.__max_life = 300
-        self.__life = self.__max_life
+        self.__max_hp = 300
+        self.__hp = self.__max_hp
         self.__strength = 100
-        self.__food = 300
+        self.__satiation = 300
         self.__potion = 0
         self.__blazegem = 0
 
@@ -92,17 +96,17 @@ class Player(Event):
         self.__event_map = event_map
 
     def __hungry_by_move(self):
-        if self.__food > 0:
-            self.__food = self.__food - 1
-            if self.__life < self.__max_life:
-                self.__life = self.__life + 1
+        if self.__satiation > 0:
+            self.__satiation = self.__satiation - 1
+            if self.__hp < self.__max_hp:
+                self.__hp = self.__hp + 1
         else:
-            self.__life = self.__life - 5
-            if self.__life <= 0:
-                self.__life = 0
+            self.__hp = self.__hp - 5
+            if self.__hp <= 0:
+                self.__hp = 0
 
     def is_die(self) -> bool:
-        return self.__life <= 0
+        return self.__hp <= 0
 
     def add_item(self, item: Item):
         item_type = item.item_type
@@ -113,13 +117,13 @@ class Player(Event):
             self.__blazegem += 1
             return
         if item_type == Item.Type.FOOD_SPOILED:
-            self.__food = int(self.__food / 2)
+            self.__satiation = int(self.__satiation / 2)
             return
         if item_type == Item.Type.FOOD_ADD_20:
-            self.__food += 20
+            self.__satiation += 20
             return
         if item_type == Item.Type.FOOD_ADD_100:
-            self.__food += 100
+            self.__satiation += 100
             return
 
     def setup_start_position(self):

@@ -63,9 +63,9 @@ class Enemy(Event):
 
         self.level = random.randint(1, floor)
         self.name = str(self.level)
-        self.max_life = 60 * (self.type + 1) + (self.level - 1) * 10
-        self.life = self.max_life
-        self.str = int(self.max_life/8)
+        self.max_hp = 60 * (self.type + 1) + (self.level - 1) * 10
+        self.hp = self.max_hp
+        self.str = int(self.max_hp/8)
         self.__debug_text = "-"
 
     def __is_move(self, position: (int, int)) -> bool:
@@ -115,10 +115,10 @@ class Enemy(Event):
 
     def damage(self):
         damage = self.__player.strength + self.__player.level
-        self.life -= damage
+        self.hp -= damage
 
     def is_die(self) -> bool:
-        return self.life < 0
+        return self.hp < 0
 
     def update(self):
 
@@ -138,9 +138,9 @@ class Enemy(Event):
         x = position[0]
         y = position[1] - (y_adjust + height)
         max_width = width - bs * 2
-        life = math.ceil(self.life / self.max_life * max_width)
-        if life < 0:
-            life = 0
+        hp = math.ceil(self.hp / self.max_hp * max_width)
+        if hp < 0:
+            hp = 0
         game_system.add_draw_object(
             Rect(
                 (x, y),
@@ -158,7 +158,7 @@ class Enemy(Event):
         game_system.add_draw_object(
             Rect(
                 (x + bs, y + bs),
-                (life, height - bs * 2),
+                (hp, height - bs * 2),
                 Color.GREEN
             )
         )

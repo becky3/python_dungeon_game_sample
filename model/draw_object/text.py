@@ -33,7 +33,7 @@ class Text(DrawObject):
         text = self.__text
 
         render = font.render(text, True, (0, 0, 0))
-        display.blit(render, [x+1, y+2])
+        display.blit(render, [x+1, y+1])
 
         render = font.render(text, True, self.__color)
         display.blit(render, [x, y])
