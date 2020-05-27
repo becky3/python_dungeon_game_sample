@@ -8,6 +8,7 @@ from game.game_info import GameInfo
 from game.game_system import GameSystem
 from model.dungeon import Dungeon
 from model.chip import Chip
+from model.character_chip import CharacterChip
 from model.event.event import Event
 from model.event.player import Player
 from model.draw_object.image import Image
@@ -19,7 +20,6 @@ from const import Color
 class Enemy(Event):
 
     __IMAGE = "resource/image/enemy.png"
-    __CHIP = Chip((16, 16), (16 * 8, 16 * 8))
 
     __EMY_NAME = [
         "Green slime",
@@ -48,6 +48,12 @@ class Enemy(Event):
         self.__player = player
         self.__game_system = game_system
         self.__game_info = game_info
+        self.__character_chip = CharacterChip(
+            (16, 16),
+            (16 * 8, 16 * 8),
+            direction_pattern_num=1
+        )
+        self.__anime_frame = 0
 
         floor = game_info.floor
         start_size = 3
@@ -67,6 +73,8 @@ class Enemy(Event):
         self.hp = self.max_hp
         self.str = int(self.max_hp/8)
         self.__debug_text = "-"
+
+        self.__character_chip.set_character_no(0)
 
     def __is_move(self, position: (int, int)) -> bool:
 
@@ -121,7 +129,7 @@ class Enemy(Event):
         return self.hp < 0
 
     def update(self):
-
+        self.__anime_frame += 1
         new_position = self.__get_move_position()
 
         if not self.__is_move(new_position):
@@ -131,13 +139,13 @@ class Enemy(Event):
 
     def __draw_bar(self, position: (int, int)):
         game_system = self.__game_system
-        width = self.width
-        height = 8
-        y_adjust = 10
-        bs = 2  # border_size
-        x = position[0]
+        width = self.width - 2
+        height = 4
+        y_adjust = 4
+        border_size = 1
+        x = position[0] + 1
         y = position[1] - (y_adjust + height)
-        max_width = width - bs * 2
+        max_width = width - border_size * 2
         hp = math.ceil(self.hp / self.max_hp * max_width)
         if hp < 0:
             hp = 0
@@ -150,15 +158,15 @@ class Enemy(Event):
         )
         game_system.add_draw_object(
             Rect(
-                (x + bs, y + bs),
-                (max_width, height - bs * 2),
+                (x + border_size, y + border_size),
+                (max_width, height - border_size * 2),
                 Color.RED
             )
         )
         game_system.add_draw_object(
             Rect(
-                (x + bs, y + bs),
-                (hp, height - bs * 2),
+                (x + border_size, y + border_size),
+                (hp, height - border_size * 2),
                 Color.GREEN
             )
         )
@@ -180,19 +188,21 @@ class Enemy(Event):
         )
         game_system.add_draw_object(text1)
 
-    def __get_image(self, index: int, position: (int, int)) -> Image:
-        return Image(
-            self.__IMAGE,
-            position,
-            area_rect=self.__CHIP.get_draw_rect(index)
+    def __get_animation_image(self) -> Image:
+        file_path = self.__IMAGE
+        rect = self.__character_chip.get_draw_rect(
+            pattern=self.__anime_frame
         )
+
+        return Image(file_path, area_rect=rect)
 
     def draw(self):
 
         position = self.__game_info.convert_map_to_display(
             (self.x, self.y)
         )
-        image = self.__get_image(0, position)
+        image = self.__get_animation_image()
+        image.set_position(position)
         self.__game_system.add_draw_object(image)
         self.__draw_level(position)
         self.__draw_bar(position)

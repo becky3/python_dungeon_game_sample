@@ -69,7 +69,11 @@ class Player(Event):
         self.__anime_frame = 0
         self.__pre_direction = Direction.NEWTRAL
         self.__next_position: (int, int) = None
-        self.__character_chip = CharacterChip((16, 16), (16 * 4, 16 * 4))
+        self.__character_chip = CharacterChip(
+            (16, 16),
+            (16 * 4, 16 * 4),
+            direction_pattern_num=4
+        )
 
         self.__direction = 0
 
@@ -153,6 +157,12 @@ class Player(Event):
 
         return True
 
+    def __get_direction_no(self) -> int:
+        order = Direction.get_order(self.__direction)
+        if order == -1:
+            order = 2
+        return order
+
     def __get_next_position(self, direction: (int, int)) -> (int, int):
         y, x = direction
         next_position = (
@@ -181,7 +191,7 @@ class Player(Event):
     def __get_animation_image(self) -> Image:
         file_path = self.__IMAGE
         rect = self.__character_chip.get_draw_rect(
-            self.__direction,
+            self.__get_direction_no(),
             self.__anime_frame
         )
 
@@ -221,9 +231,9 @@ class Player(Event):
         self.__do_move()
 
     def draw(self):
-        x, y = self.__game_info.convert_map_to_display(
+        position = self.__game_info.convert_map_to_display(
             (self.x, self.y)
         )
         image = self.__get_animation_image()
-        image.set_position((x, y))
+        image.set_position(position)
         self.__game_system.add_draw_object(image)
