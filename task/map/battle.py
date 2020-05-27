@@ -25,7 +25,7 @@ class Battle(Task):
 
         enemy = self.__enemy
 
-        enemy.damage()
+        enemy.battle()
 
         if enemy.is_die():
             game_system.play_se(SE.ENEMY_DOWN)
@@ -37,9 +37,14 @@ class Battle(Task):
                 self.__next_task = GetItem(mm, item)
                 return
 
-        else:
-            game_system.play_se(SE.ATTACK)
-            player.back()
+        game_system.play_se(SE.ATTACK)
+        player.battle(enemy)
+        player.back()
+
+        if player.is_die():
+            from task.map.game_over import GameOver
+            self.__next_task = GameOver(mm)
+            return
 
         from task.map.input_wait import InputWait
         self.__next_task = InputWait(mm)
