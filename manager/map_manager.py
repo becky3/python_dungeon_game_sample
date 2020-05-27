@@ -34,8 +34,8 @@ class MapManager:
 
     def draw_floor_info(self):
         floor_text = "({},{})".format(
-            self.player.x,
-            self.player.y
+            self.player.map_coordinate[0],
+            self.player.map_coordinate[1]
         )
 
         self.game_system.add_draw_object(
@@ -75,6 +75,7 @@ class MapManager:
         texts = [
             "B{}F".format(floor),
             "LV {}".format(player.level),
+            "STR {}".format(player.strength)
         ]
 
         text = "  ".join(texts)

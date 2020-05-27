@@ -101,7 +101,7 @@ class SceneMap(Scene):
             game_system.add_draw_object(
                 Text(
                     welcome_text,
-                    (300, 180),
+                    (20, 40),
                     Color.CYAN
                 )
             )
@@ -109,7 +109,7 @@ class SceneMap(Scene):
         game_system.add_draw_object(
             Text(
                 speed_text,
-                (740, 40),
+                (100, 8),
                 Color.WHITE,
                 Text.FontSize.SMALL
             )

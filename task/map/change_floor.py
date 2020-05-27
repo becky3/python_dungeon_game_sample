@@ -28,26 +28,27 @@ class ChangeFloor(Task):
         game_system = mm.game_system
         game_info = mm.game_info
         timer = mm.game_system.timer
+        one_height = 144 / 10
 
         if 1 <= timer <= 5:
-            h = 80 * timer
+            h = one_height * timer
             game_system.add_draw_object(
-                Rect((0, 0), (880, h), is_absolute_position=True)
+                Rect((0, 0), (144, h), is_absolute_position=True)
             )
             game_system.add_draw_object(
-                Rect((0, 720-h), (880, h), is_absolute_position=True)
+                Rect((0, 144-h), (144, h), is_absolute_position=True)
             )
         if timer == 5:
             game_info.add_floor()
             mm.game_info.set_welcome_view_time(15)
             mm.init_floor()
         if 6 <= timer <= 9:
-            h = 80 * (10 - timer)
+            h = one_height * (10 - timer)
             game_system.add_draw_object(
-                Rect((0, 0), (880, h), is_absolute_position=True)
+                Rect((0, 0), (144, h), is_absolute_position=True)
             )
             game_system.add_draw_object(
-                Rect((0, 720-h), (880, h), is_absolute_position=True)
+                Rect((0, 144-h), (144, h), is_absolute_position=True)
             )
 
     def exit(self):
