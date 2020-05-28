@@ -2,7 +2,6 @@ import math
 
 from model.dungeon import Dungeon
 from model.event.player import Player
-from model.draw_object.image import Image
 from model.draw_object.text import Text
 from model.draw_object.rect import Rect
 from manager.event_manager import EventManager
@@ -93,7 +92,6 @@ class MapManager:
 
         x, y = base_position
 
-        timer = self.game_system.timer
         player = self.player
 
         texts = [
@@ -133,7 +131,7 @@ class MapManager:
 
         self.game_system.add_draw_object(
             Text(
-                "[ F ] {}".format(player.blazegem),
+                "[ F ] {}".format(player.bom),
                 (x, y + 12),
                 Color.GREEN,
                 Text.FontSize.SMALL

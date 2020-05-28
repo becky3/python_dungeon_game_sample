@@ -1,5 +1,6 @@
 import pygame
 
+
 class InputManager:
 
     __key_pressed = []
@@ -9,7 +10,7 @@ class InputManager:
         cls.__key_pressed = pygame.key.get_pressed()
 
     @classmethod
-    def isPush(cls, key_code : int) -> bool:
+    def isPush(cls, key_code: int) -> bool:
         if len(cls.__key_pressed) < key_code:
             return False
         return cls.__key_pressed[key_code]

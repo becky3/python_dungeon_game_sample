@@ -18,12 +18,12 @@ class TreasureBox(Event):
             Item.Type.POTION,
             Item.Type.POTION,
             Item.Type.POTION,
-            Item.Type.BLAZE_GEM,
-            Item.Type.BLAZE_GEM,
-            Item.Type.BLAZE_GEM,
-            Item.Type.BLAZE_GEM,
-            Item.Type.BLAZE_GEM,
-            Item.Type.BLAZE_GEM,
+            Item.Type.BOM,
+            Item.Type.BOM,
+            Item.Type.BOM,
+            Item.Type.BOM,
+            Item.Type.BOM,
+            Item.Type.BOM,
             Item.Type.FOOD_SPOILED,
         ])
         return Item(item_type)

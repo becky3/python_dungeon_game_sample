@@ -45,8 +45,8 @@ class Player(Event):
         return self.__potion
 
     @property
-    def blazegem(self) -> int:
-        return self.__blazegem
+    def bom(self) -> int:
+        return self.__bom
 
     @property
     def next_position(self) -> (int, int):
@@ -79,7 +79,7 @@ class Player(Event):
 
         self.__satiation = 0
         self.__potion = 0
-        self.__blazegem = 0
+        self.__bom = 0
 
         self.__level = 0
         self.__hp = 0
@@ -96,7 +96,7 @@ class Player(Event):
         self.__strength = 100
         self.__satiation = 300
         self.__potion = 0
-        self.__blazegem = 0
+        self.__bom = 0
 
     # TODO: __init__で設定したい
     def set_event_map(self, event_map: Matrix):
@@ -119,8 +119,8 @@ class Player(Event):
         if item_type == Item.Type.POTION:
             self.__potion += 1
             return
-        if item_type == Item.Type.BLAZE_GEM:
-            self.__blazegem += 1
+        if item_type == Item.Type.BOM:
+            self.__bom += 1
             return
         if item_type == Item.Type.FOOD_SPOILED:
             self.__satiation = int(self.__satiation / 2)
@@ -147,6 +147,17 @@ class Player(Event):
 
     def set_character_type(self, _type: int):
         self.__character_chip.set_character_no(_type)
+
+    def use_item(self, item: Item):
+        if item.item_type == Item.Type.POTION:
+            self.__add_hp(300)
+            self.__potion -= 1
+            if self.__potion <= 0:
+                self.__potion = 0
+        if item.item_type == Item.Type.BOM:
+            self.__bom -= 1
+            if self.__bom <= 0:
+                self.__bom = 0
 
     def __can_move(self, direction: (int, int)) -> bool:
         if direction == Direction.NEWTRAL:
