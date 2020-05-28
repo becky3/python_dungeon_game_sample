@@ -18,6 +18,8 @@ class SE:
     BOM = "resource/se/bom.wav"
     POTION = "resource/se/potion.wav"
     LEVEL_UP = "resource/se/level_up.wav"
+    START = "resource/se/start.wav"
+    BUMP = "resource/se/bump.wav"
 
 
 class SoundManager:

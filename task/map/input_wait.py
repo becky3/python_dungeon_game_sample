@@ -4,6 +4,7 @@ from const import Key, Direction
 
 from manager.map_manager import MapManager
 from manager.input_manager import InputManager
+from manager.sound_manager import SE
 from task.task import Task
 from model.item import Item
 
@@ -59,6 +60,8 @@ class InputWait(Task):
             from task.map.move import Move
             self.__next_task = Move(self.__map_manager)
             return
+        elif direction != Direction.NEWTRAL:
+            game_system.play_se(SE.BUMP)
 
     def draw(self):
         mm = self.__map_manager
