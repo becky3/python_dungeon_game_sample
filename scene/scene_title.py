@@ -2,7 +2,7 @@ from const import Color, Key
 from scene.scene import Scene
 from scene.scene_map import SceneMap
 from manager.input_manager import InputManager
-from manager.sound_manager import Music
+from manager.sound_manager import Music, SE
 from model.draw_object.image import Image
 from model.draw_object.text import Text
 
@@ -28,6 +28,7 @@ class SceneTitle(Scene):
 
     def update(self):
         if InputManager.isPush(Key.SPACE):
+            super().game_system.play_se(SE.START)
             self.__next_scene = SceneMap()
 
     def draw(self):
