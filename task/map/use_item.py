@@ -15,6 +15,8 @@ class UseItem(Task):
         self.__map_manager = map_manager
         self.__next_task: Task = None
         self.__item = item
+        self.__get_item = None
+        self.__is_level_up = False
 
     def start(self):
         mm = self.__map_manager
@@ -38,14 +40,31 @@ class UseItem(Task):
             self.__bom_update()
 
     def __potion_update(self):
-        if self.__map_manager.game_system.timer == 8:
-            from task.map.input_wait import InputWait
-            self.__next_task = InputWait(self.__map_manager)
+        if self.__map_manager.game_system.timer < 8:
+            return
+
+        from task.map.input_wait import InputWait
+        self.__next_task = InputWait(self.__map_manager)
 
     def __bom_update(self):
-        if self.__map_manager.game_system.timer == 8:
-            from task.map.input_wait import InputWait
-            self.__next_task = InputWait(self.__map_manager)
+        mm = self.__map_manager
+        if mm.game_system.timer < 8:
+            return
+
+        self.__attack_bom_at_area()
+
+        if self.__get_item is not None:
+            from task.map.get_item import GetItem
+            self.__next_task = GetItem(mm, self.__get_item)
+            return
+
+        if self.__is_level_up:
+            from task.map.level_up import LevelUp
+            self.__next_task = LevelUp(mm)
+            return
+
+        from task.map.input_wait import InputWait
+        self.__next_task = InputWait(self.__map_manager)
 
     def draw(self):
 
@@ -84,29 +103,40 @@ class UseItem(Task):
         game_system.add_draw_object(bom_image)
 
     def exit(self):
+        pass
 
-        if self.__item.item_type == Item.Type.BOM:
-            player_y, player_x = self.__map_manager.player.map_coordinate
+    def __attack_bom_at_area(self):
 
-            for y in range(-1, 2):
-                for x in range(-1, 2):
-                    self.__attack_bom((
-                        y + player_y,
-                        x + player_x
-                    ))
+        player_y, player_x = self.__map_manager.player.map_coordinate
 
-    def __attack_bom(self, position: (int, int)):
+        for y in range(-1, 2):
+            for x in range(-1, 2):
+                self.__attack_bom_at_position((
+                    y + player_y,
+                    x + player_x
+                ))
+
+    def __attack_bom_at_position(self, position: (int, int)):
 
         event_manager = self.__map_manager.event_manager
         enemy_map = event_manager.enemy_map
         treasure_map = event_manager.treasure_map
+        player = self.__map_manager.player
 
         enemy: Enemy = enemy_map[position]
-        print("seach:[{},{}]".format(position[0], position[1]))
         if enemy is not None:
             enemy.add_hp(-1000)
+
             if enemy.is_die():
                 event_manager.remove_enemy(enemy)
+                item = enemy.get_item()
+
+                if item is not None:
+                    self.__get_item = item
+
+                if player.is_level_up(enemy):
+                    self.__is_level_up = True
+
         treasure_box: TreasureBox = treasure_map[position]
         if treasure_box is not None:
             event_manager.remove_treasure(treasure_box)
