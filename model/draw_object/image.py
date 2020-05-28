@@ -1,8 +1,6 @@
-import math
 
 import pygame
 
-from const import Direction
 from model.draw_object.draw_object import DrawObject
 
 
@@ -16,12 +14,14 @@ class Image(DrawObject):
                  file_path: str,
                  position: (int, int) = (0, 0),
                  is_absolute_position: bool = False,
-                 area_rect: (int, int, int, int) = None
+                 area_rect: (int, int, int, int) = None,
+                 transform: (float, float) = None
                  ):
         super().__init__(position, is_absolute_position)
         from manager.resource_manager import ResourceManager
         self.__image = ResourceManager.get_image(file_path)
         self.__width, self.__height = self.__image.get_size()
+        self.__transform = transform
         self.__area_rect = area_rect
 
     def draw(self,
@@ -29,8 +29,15 @@ class Image(DrawObject):
              adjust: (int, int)
              ):
         x, y = adjust
+
+        if self.__transform is None:
+            image = self.__image
+        else:
+            angle, scale = self.__transform
+            image = pygame.transform.rotozoom(self.__image, angle, scale)
+
         display.blit(
-            self.__image,
+            image,
             [self.x - x, self.y - y],
             self.__area_rect
         )
