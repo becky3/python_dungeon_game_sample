@@ -2,11 +2,12 @@ import math
 import random
 
 from libs.matrix import Matrix
-from const import Direction
+from const import Direction, Color
 from game.game_info import GameInfo
 from game.game_system import GameSystem
 from model.item import Item
 from model.dungeon import Dungeon
+from model.draw_object.text import Text
 from model.draw_object.image import Image
 from model.character_chip import CharacterChip
 from model.event.event import Event
@@ -88,6 +89,8 @@ class Player(Event):
         self.__limit_level = 99
         self.__limit_strength = 999
         self.__limit_hp = 999
+        self.__pre_damage = 0
+        self.__damage_view_time = 0
 
     def reset_status(self):
         self.__level = 1
@@ -240,8 +243,10 @@ class Player(Event):
         # 相互importとなるため、関数内部で型解決
         from model.event.enemy import Enemy
         enemy: Enemy = target_enemy
-        damage = enemy.strength + enemy.level
+        damage = enemy.strength + random.randint(1, enemy.level + 5)
         self.__add_hp(-damage)
+        self.__pre_damage = damage
+        self.__damage_view_time = 10
 
     def __add_hp(self, value: int):
         self.__hp += value
@@ -289,6 +294,23 @@ class Player(Event):
 
         self.__do_move()
 
+    def __draw_damage(self, position: (int, int)):
+
+        game_system = self.__game_system
+
+        adjust = self.__damage_view_time
+        x = position[0]
+        y = position[1] + self.height - 32 + adjust
+
+        text = Text(
+            str(self.__pre_damage),
+            (x, y),
+            Color.YELLOW,
+            font_size=Text.FontSize.NORMAL,
+            is_absolute_position=False
+        )
+        game_system.add_draw_object(text)
+
     def draw(self):
         position = self.__game_info.convert_map_to_display(
             (self.x, self.y)
@@ -296,3 +318,6 @@ class Player(Event):
         image = self.__get_animation_image()
         image.set_position(position)
         self.__game_system.add_draw_object(image)
+        if self.__damage_view_time > 0:
+            self.__damage_view_time -= 1
+            self.__draw_damage(position)

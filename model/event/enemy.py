@@ -148,7 +148,8 @@ class Enemy(Event):
         return (y, x)
 
     def battle(self):
-        damage = self.__player.strength + self.__player.level
+        damage = self.__player.strength \
+            + random.randint(1, self.__player.level ^ 2 + 5)
         self.add_hp(-damage)
 
     def add_hp(self, value: int):
