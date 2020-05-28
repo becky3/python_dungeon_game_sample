@@ -1,19 +1,19 @@
-from pygame import locals as l
+from pygame import locals
 
 
 class Key:
-    LEFT = l.K_LEFT
-    UP = l.K_UP
-    DOWN = l.K_DOWN
-    LEFT = l.K_LEFT
-    RIGHT = l.K_RIGHT
-    SPACE = l.K_SPACE
-    RETURN = l.K_RETURN
-    a = l.K_a
-    p = l.K_p
-    b = l.K_b
-    r = l.K_r
-    s = l.K_s
+    LEFT = locals.K_LEFT
+    UP = locals.K_UP
+    DOWN = locals.K_DOWN
+    LEFT = locals.K_LEFT
+    RIGHT = locals.K_RIGHT
+    SPACE = locals.K_SPACE
+    RETURN = locals.K_RETURN
+    a = locals.K_a
+    p = locals.K_p
+    b = locals.K_b
+    r = locals.K_r
+    s = locals.K_s
 
 
 class Color:
@@ -22,6 +22,7 @@ class Color:
     RED = (255, 0, 0)
     GREEN = (0, 255, 0)
     BLUE = (0, 0, 255)
+    YELLOW = (255, 255, 0)
     CYAN = (0, 255, 255)
 
 

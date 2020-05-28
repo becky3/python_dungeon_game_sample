@@ -131,7 +131,7 @@ class MapManager:
 
         self.game_system.add_draw_object(
             Text(
-                "[ F ] {}".format(player.bom),
+                "[ B ] {}".format(player.bom),
                 (x, y + 12),
                 Color.GREEN,
                 Text.FontSize.SMALL
