@@ -1,4 +1,4 @@
-
+import math
 import random
 
 from libs.matrix import Matrix
@@ -85,6 +85,9 @@ class Player(Event):
         self.__hp = 0
         self.__max_hp = 0
         self.__strength = 0
+        self.__limit_level = 99
+        self.__limit_strength = 999
+        self.__limit_hp = 999
 
     def reset_status(self):
         self.__level = 1
@@ -172,6 +175,13 @@ class Player(Event):
 
     def level_up(self):
         self.__level += 1
+        if self.__level > self.__limit_level:
+            self.__level = self.__limit_level
+        hp = random.randint(10, 20 + math.floor(self.__level / 2))
+        strength = random.randint(5, 10 + math.floor(self.__level / 2))
+        self.__add_max_hp(hp)
+        self.__add_hp(hp)
+        self.__add_strength(strength)
 
     def ready_move(self, direction: (int, int)) -> bool:
 
@@ -230,6 +240,16 @@ class Player(Event):
         if self.__hp > self.__max_hp:
             self.__hp = self.__max_hp
 
+    def __add_strength(self, value: int):
+        self.__strength += value
+        if self.__strength > self.__limit_strength:
+            self.strength = self.__limit_strength
+
+    def __add_max_hp(self, value: int):
+        self.__max_hp += value
+        if self.__max_hp > self.__limit_hp:
+            self.__max_hp = self.__limit_hp
+
     def back(self):
         y, x = self.__pre_direction
         self.add_position((y * -1, x * -1))
@@ -238,6 +258,10 @@ class Player(Event):
         return self.__next_position is not None
 
     def is_level_up(self, target_enemy: object) -> bool:
+
+        if self.__level >= self.__limit_level:
+            return False
+
         # 相互importとなるため、関数内部で型解決
         from model.event.enemy import Enemy
         enemy: Enemy = target_enemy
