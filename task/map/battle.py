@@ -37,6 +37,11 @@ class Battle(Task):
                 self.__next_task = GetItem(mm, item)
                 return
 
+            if player.is_level_up(enemy):
+                from task.map.level_up import LevelUp
+                self.__next_task = LevelUp(mm)
+                return
+
         game_system.play_se(SE.ATTACK)
         player.battle(enemy)
         player.back()

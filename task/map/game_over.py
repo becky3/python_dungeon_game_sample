@@ -29,7 +29,7 @@ class GameOver(Task):
         timer = game_system.timer
         player = mm.player
 
-        if timer <= 30:
+        if timer < 30:
             PL_TURN = [
                 Direction.UP,
                 Direction.RIGHT,
@@ -37,16 +37,19 @@ class GameOver(Task):
                 Direction.LEFT,
             ]
             player.set_direction(PL_TURN[timer % 4])
-            if timer == 30:
-                player.set_character_type(Player.CharacterType.DIE)
-            mm.draw_map()
-            mm.draw_parameter()
-        elif timer == 31:
+
+        elif timer == 30:
+            player.set_character_type(Player.CharacterType.DIE)
             game_system.play_music(Music.GAME_OVER)
+
+        mm.draw_map()
+        mm.draw_parameter()
+
+        if timer > 30:
             game_system.add_draw_object(
                 Text(
                     "You died.",
-                    (360, 240),
+                    (46, 40),
                     Color.RED,
                     Text.FontSize.SMALL
                 )
@@ -54,7 +57,7 @@ class GameOver(Task):
             game_system.add_draw_object(
                 Text(
                     "Game over.",
-                    (360, 380),
+                    (46, 80),
                     Color.RED,
                     Text.FontSize.SMALL
                 )

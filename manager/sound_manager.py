@@ -17,7 +17,7 @@ class SE:
     CHANGE_FLOOR = "resource/se/change_floor.wav"
     BOM = ""
     POTION = ""
-    LEVEL_UP = ""
+    LEVEL_UP = "resource/se/level_up.wav"
 
 
 class SoundManager:
