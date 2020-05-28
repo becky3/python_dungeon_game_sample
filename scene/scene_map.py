@@ -53,8 +53,8 @@ class SceneMap(Scene):
             player
         )
 
-        self.__map_manager.init_floor()
         game_info.reset_floor()
+        self.__map_manager.init_floor()
 
         player.reset_status()
         player.set_event_map(event_manager.enemy_map)

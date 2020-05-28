@@ -5,6 +5,8 @@ from task.task import Task
 from manager.sound_manager import SE
 from model.item import Item
 from model.draw_object.image import Image
+from model.event.enemy import Enemy
+from model.event.treasure_box import TreasureBox
 
 
 class UseItem(Task):
@@ -82,7 +84,32 @@ class UseItem(Task):
         game_system.add_draw_object(bom_image)
 
     def exit(self):
-        pass
+
+        if self.__item.item_type == Item.Type.BOM:
+            player_y, player_x = self.__map_manager.player.map_coordinate
+
+            for y in range(-1, 2):
+                for x in range(-1, 2):
+                    self.__attack_bom((
+                        y + player_y,
+                        x + player_x
+                    ))
+
+    def __attack_bom(self, position: (int, int)):
+
+        event_manager = self.__map_manager.event_manager
+        enemy_map = event_manager.enemy_map
+        treasure_map = event_manager.treasure_map
+
+        enemy: Enemy = enemy_map[position]
+        print("seach:[{},{}]".format(position[0], position[1]))
+        if enemy is not None:
+            enemy.add_hp(-1000)
+            if enemy.is_die():
+                event_manager.remove_enemy(enemy)
+        treasure_box: TreasureBox = treasure_map[position]
+        if treasure_box is not None:
+            event_manager.remove_treasure(treasure_box)
 
     def get_next_task(self) -> Optional[Task]:
         return self.__next_task
