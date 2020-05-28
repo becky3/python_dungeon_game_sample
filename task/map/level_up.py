@@ -3,7 +3,7 @@ from typing import Optional
 from manager.map_manager import MapManager
 from task.task import Task
 from const import Color, Direction
-from manager.sound_manager import SE
+from manager.sound_manager import Music, SE
 from model.draw_object.text import Text
 
 
@@ -14,53 +14,44 @@ class LevelUp(Task):
         self.__next_task: Task = None
 
     def start(self):
-        self.__map_manager.game_system.stop_music()
+        mm = self.__map_manager
+        mm.game_system.stop_music()
+        mm.game_system.play_se(
+            SE.LEVEL_UP
+        )
+        mm.player.level_up()
+        mm.player.set_direction(Direction.DOWN)
 
     def update(self):
 
-        if self.__map_manager.game_system.timer == 100:
-            from task.map.scene_to_title import SceneToTitle
-            self.__next_task = SceneToTitle()
+        if self.__map_manager.game_system.timer == 50:
+            from task.map.input_wait import InputWait
+            self.__next_task = InputWait(self.__map_manager)
 
     def draw(self):
         mm = self.__map_manager
         game_system = mm.game_system
         timer = game_system.timer
-        player = mm.player
 
-        if timer < 8:
-            PL_TURN = [
-                Direction.UP,
-                Direction.RIGHT,
-                Direction.DOWN,
-                Direction.LEFT,
-            ]
-            player.set_direction(PL_TURN[timer % 4])
-            if timer == 8:
-                player.set_direction(Direction.DOWN)
-            mm.draw_map()
-            mm.draw_parameter()
-        elif timer == 10:
-            game_system.play_se(SE.LEVEL_UP)
+        mm.draw_map()
+        mm.draw_parameter()
+
+        if timer > 5:
             game_system.add_draw_object(
                 Text(
-                    "You died.",
-                    (360, 240),
-                    Color.RED,
-                    Text.FontSize.SMALL
-                )
-            )
-            game_system.add_draw_object(
-                Text(
-                    "Game over.",
-                    (360, 380),
-                    Color.RED,
-                    Text.FontSize.SMALL
+                    "LEVEL UP!!",
+                    (40, 40),
+                    Color.GREEN,
+                    Text.FontSize.NORMAL
                 )
             )
 
     def exit(self):
-        pass
+        mm = self.__map_manager
+        mm.game_system.stop_music()
+        mm.game_system.play_music(
+            Music.DUNGEON
+        )
 
     def get_next_task(self) -> Optional[Task]:
         return self.__next_task

@@ -88,10 +88,10 @@ class Player(Event):
 
     def reset_status(self):
         self.__level = 1
-        self.__max_hp = 3  # 00
+        self.__max_hp = 300
         self.__hp = self.__max_hp
         self.__strength = 100
-        self.__satiation = 3  # 00
+        self.__satiation = 300
         self.__potion = 0
         self.__blazegem = 0
 
@@ -170,6 +170,9 @@ class Player(Event):
         )
         return next_position
 
+    def level_up(self):
+        self.__level += 1
+
     def ready_move(self, direction: (int, int)) -> bool:
 
         if not self.__can_move(direction):
@@ -212,11 +215,11 @@ class Player(Event):
         self.set_position(self.__next_position)
         self.__next_position = None
 
-    def battle(self, enemy: object):
+    def battle(self, target_enemy: object):
         # 相互importとなるため、関数内部で型解決
         from model.event.enemy import Enemy
-        _enemy: Enemy = enemy
-        damage = _enemy.strength + _enemy.level
+        enemy: Enemy = target_enemy
+        damage = enemy.strength + enemy.level
         self.__add_hp(-damage)
 
     def __add_hp(self, value: int):
@@ -233,6 +236,13 @@ class Player(Event):
 
     def is_moving(self) -> bool:
         return self.__next_position is not None
+
+    def is_level_up(self, target_enemy: object) -> bool:
+        # 相互importとなるため、関数内部で型解決
+        from model.event.enemy import Enemy
+        enemy: Enemy = target_enemy
+        return random.randint(0, enemy.max_hp) \
+            > random.randint(0, self.__max_hp)
 
     def set_direction(self, direction: int):
         self.__direction = direction
