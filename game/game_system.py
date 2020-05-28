@@ -23,7 +23,7 @@ class GameSystem():
     def __init__(self):
         super().__init__()
         self.__timer = 0
-        self.__speed = 1
+        self.__speed = 4
         self.__display: pygame.display = None
         self.__sound_manager = SoundManager()
         self.__camera: Camera = None

@@ -7,7 +7,7 @@ from scene.scene import Scene
 from scene.scene_title import SceneTitle
 
 __SCREEN_SIZE = (144, 144)
-__POWER = 4
+__POWER = 5
 __MAP_CHIP_SIZE = (16, 16)
 
 
