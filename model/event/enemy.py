@@ -97,6 +97,8 @@ class Enemy(Event):
         self.__debug_text = "-"
 
         self.__character_chip.set_character_no(0)
+        self.__pre_damage = 0
+        self.__damage_view_time = 0
 
     def __can_move(self, position: (int, int)) -> bool:
 
@@ -149,8 +151,10 @@ class Enemy(Event):
 
     def battle(self):
         damage = self.__player.strength \
-            + random.randint(1, self.__player.level ^ 2 + 5)
+            + random.randint(1, self.__player.level ** 2 + 5)
         self.add_hp(-damage)
+        self.__pre_damage = damage
+        self.__damage_view_time = 10
 
     def add_hp(self, value: int):
         self.__hp += value
@@ -246,6 +250,23 @@ class Enemy(Event):
 
         return Image(file_path, area_rect=rect)
 
+    def __draw_damage(self, position: (int, int)):
+
+        game_system = self.__game_system
+
+        adjust = self.__damage_view_time
+        x = position[0]
+        y = position[1] + self.height - 48 + adjust
+
+        text = Text(
+            str(self.__pre_damage),
+            (x, y),
+            Color.WHITE,
+            font_size=Text.FontSize.NORMAL,
+            is_absolute_position=False
+        )
+        game_system.add_draw_object(text)
+
     def draw(self):
 
         position = self.__game_info.convert_map_to_display(
@@ -256,3 +277,6 @@ class Enemy(Event):
         self.__game_system.add_draw_object(image)
         self.__draw_level(position)
         self.__draw_bar(position)
+        if self.__damage_view_time > 0:
+            self.__damage_view_time -= 1
+            self.__draw_damage(position)

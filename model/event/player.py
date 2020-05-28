@@ -300,7 +300,7 @@ class Player(Event):
 
         adjust = self.__damage_view_time
         x = position[0]
-        y = position[1] + self.height - 32 + adjust
+        y = position[1] + self.height - 16 + adjust
 
         text = Text(
             str(self.__pre_damage),
