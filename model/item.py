@@ -11,7 +11,7 @@ class Item():
 
     class Type:
         POTION = 0
-        BLAZE_GEM = 1
+        BOM = 1
         FOOD_SPOILED = 2
         FOOD_ADD_20 = 3
         FOOD_ADD_100 = 4

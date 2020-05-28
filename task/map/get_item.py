@@ -3,9 +3,6 @@ from typing import Optional
 from manager.map_manager import MapManager
 from manager.sound_manager import SE
 from task.task import Task
-from const import Color
-from model.draw_object.image import Image
-from model.draw_object.text import Text
 from model.item import Item
 
 

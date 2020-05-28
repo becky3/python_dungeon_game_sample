@@ -11,7 +11,6 @@ from model.event.treasure_box import TreasureBox
 from model.event.stairs import Stairs
 from model.event.player import Player
 from model.dungeon import Dungeon
-from model.draw_object.text import Text
 
 
 class EventManager:
@@ -23,6 +22,10 @@ class EventManager:
     @property
     def enemy_map(self) -> Matrix:
         return self.__enemy_map
+
+    @property
+    def treasure_map(self) -> Matrix:
+        return self.__treasure_map
 
     def __init__(self,
                  game_system: GameSystem,
@@ -65,7 +68,11 @@ class EventManager:
     def is_floor_clear(self) -> bool:
         return self.__player.map_coordinate == self.__stair.map_coordinate
 
-    def __create_stair(self, floor_map: Matrix, width: int, height: int, room_size: int):
+    def __create_stair(self,
+                       floor_map: Matrix,
+                       width: int,
+                       height: int,
+                       room_size: int):
         while True:
             x = random.randint(3, width - 4)
             y = random.randint(3, height - 4)
@@ -78,7 +85,9 @@ class EventManager:
             self.__stair = Stairs((y, x), self.__game_system, self.__game_info)
             break
 
-    def __can_create_events(self, dungeon: Dungeon, position: (int, int)) -> bool:
+    def __can_create_events(self,
+                            dungeon: Dungeon,
+                            position: (int, int)) -> bool:
         y, x = position
         if dungeon.floor_map[y, x] != 0:
             return False

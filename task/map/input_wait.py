@@ -5,7 +5,7 @@ from const import Key, Direction
 from manager.map_manager import MapManager
 from manager.input_manager import InputManager
 from task.task import Task
-from task.map.move import Move
+from model.item import Item
 
 
 class InputWait(Task):
@@ -40,11 +40,25 @@ class InputWait(Task):
         if InputManager.isPush(Key.s):
             game_system.add_speed()
 
-        direction = self.__get_push_direction()
-        if not player.ready_move(direction):
+        if InputManager.isPush(Key.p) and player.potion > 0:
+            from task.map.use_item import UseItem
+            self.__next_task = UseItem(
+                self.__map_manager, Item(Item.Type.POTION)
+            )
             return
 
-        self.__next_task = Move(self.__map_manager)
+        if InputManager.isPush(Key.b) and player.bom > 0:
+            from task.map.use_item import UseItem
+            self.__next_task = UseItem(
+                self.__map_manager, Item(Item.Type.BOM)
+            )
+            return
+
+        direction = self.__get_push_direction()
+        if player.ready_move(direction):
+            from task.map.move import Move
+            self.__next_task = Move(self.__map_manager)
+            return
 
     def draw(self):
         mm = self.__map_manager

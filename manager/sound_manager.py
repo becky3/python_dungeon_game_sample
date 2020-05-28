@@ -15,8 +15,8 @@ class SE:
     GOOD_ITEM = "resource/se/good_item.wav"
     BAD_ITEM = "resource/se/bad_item.wav"
     CHANGE_FLOOR = "resource/se/change_floor.wav"
-    BOM = ""
-    POTION = ""
+    BOM = "resource/se/bom.wav"
+    POTION = "resource/se/potion.wav"
     LEVEL_UP = "resource/se/level_up.wav"
 
 

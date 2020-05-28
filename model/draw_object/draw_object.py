@@ -20,7 +20,10 @@ class DrawObject(ABC):
     def set_position(self, value: (int, int)):
         self.__x, self.__y = value
 
-    def __init__(self, position: (int, int), is_absolute_position: bool = False):
+    def __init__(self,
+                 position: (int, int),
+                 is_absolute_position: bool = False
+                 ):
         self.__x, self.__y = position
         self.__is_absolute_position = is_absolute_position
 

@@ -149,10 +149,18 @@ class Enemy(Event):
 
     def battle(self):
         damage = self.__player.strength + self.__player.level
-        self.__hp -= damage
+        self.add_hp(-damage)
+
+    def add_hp(self, value: int):
+        self.__hp += value
+        if self.__hp < 0:
+            self.__hp = 0
+
+        if self.__hp > self.__max_hp:
+            self.__hp = self.__max_hp
 
     def is_die(self) -> bool:
-        return self.hp < 0
+        return self.hp <= 0
 
     def get_item(self) -> Optional[Item]:
 
