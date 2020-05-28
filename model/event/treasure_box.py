@@ -18,7 +18,7 @@ class TreasureBox(Event):
             Item.Type.POTION,
             Item.Type.POTION,
             Item.Type.POTION,
-            Item.Type.BOM,
+            Item.Type.POTION,
             Item.Type.BOM,
             Item.Type.BOM,
             Item.Type.BOM,

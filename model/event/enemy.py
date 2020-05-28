@@ -23,19 +23,6 @@ class Enemy(Event):
 
     __IMAGE = "resource/image/enemy.png"
 
-    __EMY_NAME = [
-        "Green slime",
-        "Red slime",
-        "Axe beast",
-        "Ogre",
-        "Sword man",
-        "Death hornet",
-        "Signal slime",
-        "Devil plant",
-        "Twin killer",
-        "Hell"
-    ]
-
     @property
     def level(self) -> int:
         return self.__level
@@ -72,7 +59,7 @@ class Enemy(Event):
         self.__game_info = game_info
         self.__character_chip = CharacterChip(
             (16, 16),
-            (16 * 8, 16 * 8),
+            (16 * 10, 16 * 10),
             direction_pattern_num=1
         )
         self.__anime_frame = 0
@@ -85,9 +72,10 @@ class Enemy(Event):
             search_size = random.randint(start_size, max_size)
         self.__search_size = search_size
 
-        self.type = random.randint(0, floor)
-        if floor >= 10:
-            self.type = random.randint(0, 9)
+        max_enemy_type = math.ceil(floor / 3)
+        self.type = random.randint(0, max_enemy_type)
+        if max_enemy_type >= 10:
+            self.type = random.randint(0, 10)
 
         self.__level = random.randint(1, floor)
         self.__name = str(self.level)
@@ -96,7 +84,7 @@ class Enemy(Event):
         self.__strength = math.ceil(self.max_hp/8)
         self.__debug_text = "-"
 
-        self.__character_chip.set_character_no(0)
+        self.__character_chip.set_character_no(self.type)
         self.__pre_damage = 0
         self.__damage_view_time = 0
 
@@ -151,7 +139,7 @@ class Enemy(Event):
 
     def battle(self):
         damage = self.__player.strength \
-            + random.randint(1, self.__player.level ** 2 + 5)
+            + random.randint(1, self.__player.level * 2 + 5)
         self.add_hp(-damage)
         self.__pre_damage = damage
         self.__damage_view_time = 10
@@ -183,7 +171,6 @@ class Enemy(Event):
         return Item(item_type)
 
     def update(self):
-        self.__anime_frame += 1
         new_position = self.__get_move_position()
 
         if not self.__can_move(new_position):
@@ -245,7 +232,7 @@ class Enemy(Event):
     def __get_animation_image(self) -> Image:
         file_path = self.__IMAGE
         rect = self.__character_chip.get_draw_rect(
-            pattern=self.__anime_frame
+            pattern=math.ceil(self.__anime_frame / 2)
         )
 
         return Image(file_path, area_rect=rect)
@@ -268,7 +255,7 @@ class Enemy(Event):
         game_system.add_draw_object(text)
 
     def draw(self):
-
+        self.__anime_frame += 1
         position = self.__game_info.convert_map_to_display(
             (self.x, self.y)
         )

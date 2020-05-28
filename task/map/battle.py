@@ -41,15 +41,15 @@ class Battle(Task):
                 from task.map.level_up import LevelUp
                 self.__next_task = LevelUp(mm)
                 return
+        else:
+            game_system.play_se(SE.ATTACK)
+            player.battle(enemy)
+            player.back()
 
-        game_system.play_se(SE.ATTACK)
-        player.battle(enemy)
-        player.back()
-
-        if player.is_die():
-            from task.map.game_over import GameOver
-            self.__next_task = GameOver(mm)
-            return
+            if player.is_die():
+                from task.map.game_over import GameOver
+                self.__next_task = GameOver(mm)
+                return
 
         from task.map.input_wait import InputWait
         self.__next_task = InputWait(mm)
