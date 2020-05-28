@@ -88,10 +88,10 @@ class Player(Event):
 
     def reset_status(self):
         self.__level = 1
-        self.__max_hp = 300
+        self.__max_hp = 3  # 00
         self.__hp = self.__max_hp
         self.__strength = 100
-        self.__satiation = 300
+        self.__satiation = 3  # 00
         self.__potion = 0
         self.__blazegem = 0
 

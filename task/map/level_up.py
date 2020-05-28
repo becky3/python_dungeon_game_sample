@@ -3,12 +3,11 @@ from typing import Optional
 from manager.map_manager import MapManager
 from task.task import Task
 from const import Color, Direction
-from manager.sound_manager import Music
+from manager.sound_manager import SE
 from model.draw_object.text import Text
-from model.event.player import Player
 
 
-class GameOver(Task):
+class LevelUp(Task):
 
     def __init__(self, map_manager: MapManager):
         self.__map_manager = map_manager
@@ -29,7 +28,7 @@ class GameOver(Task):
         timer = game_system.timer
         player = mm.player
 
-        if timer < 30:
+        if timer < 8:
             PL_TURN = [
                 Direction.UP,
                 Direction.RIGHT,
@@ -37,19 +36,16 @@ class GameOver(Task):
                 Direction.LEFT,
             ]
             player.set_direction(PL_TURN[timer % 4])
-
-        elif timer == 30:
-            player.set_character_type(Player.CharacterType.DIE)
-            game_system.play_music(Music.GAME_OVER)
-
-        mm.draw_map()
-        mm.draw_parameter()
-
-        if timer > 30:
+            if timer == 8:
+                player.set_direction(Direction.DOWN)
+            mm.draw_map()
+            mm.draw_parameter()
+        elif timer == 10:
+            game_system.play_se(SE.LEVEL_UP)
             game_system.add_draw_object(
                 Text(
                     "You died.",
-                    (46, 40),
+                    (360, 240),
                     Color.RED,
                     Text.FontSize.SMALL
                 )
@@ -57,7 +53,7 @@ class GameOver(Task):
             game_system.add_draw_object(
                 Text(
                     "Game over.",
-                    (46, 80),
+                    (360, 380),
                     Color.RED,
                     Text.FontSize.SMALL
                 )

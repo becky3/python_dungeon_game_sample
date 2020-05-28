@@ -13,15 +13,6 @@ from task.map.scene_to_title import SceneToTitle
 
 class SceneMap(Scene):
 
-    __BLINK = [
-        (224, 255, 255),
-        (192, 240, 255),
-        (128, 224, 255),
-        (64, 192, 255),
-        (128, 224, 255),
-        (192, 240, 255)
-    ]
-
     def __init__(self):
         super().__init__()
         self.__next_scene = None
