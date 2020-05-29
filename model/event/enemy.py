@@ -6,17 +6,18 @@ import math
 import numpy
 
 from libs.matrix import Matrix
+from const import Direction, Color
 from game.game_info import GameInfo
 from game.game_system import GameSystem
 from model.dungeon import Dungeon
 from model.item import Item
+from model.mover import Mover
 from model.character_chip import CharacterChip
 from model.event.event import Event
 from model.event.player import Player
 from model.draw_object.image import Image
 from model.draw_object.text import Text
 from model.draw_object.rect import Rect
-from const import Color
 
 
 class Enemy(Event):
@@ -51,15 +52,17 @@ class Enemy(Event):
                  player: Player,
                  event_map: Matrix,
                  ):
+
         super().__init__(position)
         self.__dungeon = dungeon
         self.__event_map = event_map
         self.__player = player
         self.__game_system = game_system
         self.__game_info = game_info
-        self.__walk_frame = 2
-        self.__walk_plan = []
+        self.__mover = Mover()
         self.__anime_frame = 0
+        self.__direction = Direction.NEWTRAL
+        self.__next_position: (int, int) = None
         self.__character_chip = CharacterChip(
             (16, 16),
             (16 * 10, 16 * 10),
@@ -101,6 +104,8 @@ class Enemy(Event):
 
         y, x = position
 
+        print("position:{}".format(position))
+
         if floor_map[y, x] > 3:
             return False
 
@@ -115,30 +120,30 @@ class Enemy(Event):
     def __get_next_position(self) -> (int, int):
 
         reach_y, reach_x = self.__get_player_reach()
+        y, x = self.map_coordinate
         if abs(reach_y) <= self.__search_size \
                 and abs(reach_x) <= self.__search_size:
             param = (0, 0)
             if abs(reach_x) > abs(reach_y):
-                param = (self.y, self.x + (numpy.sign(reach_x) * -1))
+                param = (y, x + (numpy.sign(reach_x) * -1))
             else:
-                param = (self.y + (numpy.sign(reach_y) * -1), self.x)
+                param = (y + (numpy.sign(reach_y) * -1), x)
             return param
 
         move = random.choice([0, 1])
-        x = self.x
-        y = self.y
+        new_x = int(x)
+        new_y = int(y)
         if move == 0:
-            x = self.x + random.choice([-1, 1])
+            x = new_x + random.choice([-1, 1])
         else:
-            y = self.y + random.choice([-1, 1])
+            y = new_y + random.choice([-1, 1])
 
         return (y, x)
 
     def __get_player_reach(self) -> (int, int):
         player_y, player_x = self.__player.map_coordinate
-        x = self.x - player_x
-        y = self.y - player_y
-        return (y, x)
+        y, x = self.map_coordinate
+        return (y - player_y, x - player_x)
 
     def battle(self):
         damage = self.__player.strength \
@@ -173,13 +178,44 @@ class Enemy(Event):
 
         return Item(item_type)
 
-    def move(self):
+    def ready_move(self) -> bool:
+
         next_position = self.__get_next_position()
 
         if not self.__can_move(next_position):
+            return False
+
+        self.__next_position = next_position
+        self.__mover.ready()
+
+        y = next_position[0] - self.map_coordinate[0]
+        x = next_position[1] - self.map_coordinate[1]
+        self.__direction = (y, x)
+
+        return True
+
+    def __do_move(self):
+        self.__anime_frame += 1
+        y, x = self.__direction
+        value = self.__mover.get_next_plan()
+        position = (
+            self.y + float(y) * value,
+            self.x + float(x) * value
+        )
+        self.set_position(position)
+        if not self.__mover.have_plan():
+            self.__moved()
+
+    def __moved(self):
+        self.set_position(self.__next_position)
+        self.__next_position = None
+
+    def move(self):
+
+        if self.__next_position is None:
             return
 
-        self.set_position(next_position)
+        self.__do_move()
 
     def __draw_bar(self, position: (int, int)):
         game_system = self.__game_system

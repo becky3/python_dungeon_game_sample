@@ -36,7 +36,7 @@ class Matrix:
 
     def get_not_empty_values(self) -> []:
         if self.__data.dtype == "object":
-            # is None だと where の期待通りではないので、 lint の警告を無効化
-            return self.__data[np.where(self.__data != None)].tolist()  # pylint: disable-this-line-in-some-way
+            # is None だと where の期待通りではないので、 Flake8 の警告を無効化
+            return self.__data[np.where(self.__data != None)].tolist()   # noqa: E771, E501
 
         return self.__data[np.where(self.__data != 0)].tolist()

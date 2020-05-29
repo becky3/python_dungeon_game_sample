@@ -57,6 +57,7 @@ class InputWait(Task):
 
         direction = self.__get_push_direction()
         if player.ready_move(direction):
+            mm.event_manager.ready_move_enemys()
             from task.map.move import Move
             self.__next_task = Move(self.__map_manager)
             return

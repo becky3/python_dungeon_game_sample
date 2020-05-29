@@ -1,7 +1,7 @@
 class Mover():
 
     def __init__(self, walk_frame: int = 2):
-        self.__walk_frame = 2
+        self.__walk_frame = walk_frame
         self.__walk_plan = []
 
     def ready(self):
