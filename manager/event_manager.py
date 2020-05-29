@@ -52,16 +52,14 @@ class EventManager:
 
     def ready_move_enemys(self):
         for enemy in self.__enemy_map.get_not_empty_values():
-            enemy.ready_move()
+            if not enemy.ready_move():
+                continue
+            self.__enemy_map[enemy.next_position] = enemy
+            self.__enemy_map[enemy.map_coordinate] = None
 
     def move_enemys(self):
         for enemy in self.__enemy_map.get_not_empty_values():
-            old_position = enemy.map_coordinate
             enemy.move()
-            if old_position == enemy.map_coordinate:
-                continue
-            self.__enemy_map[enemy.map_coordinate] = enemy
-            self.__enemy_map[old_position] = None
 
     def get_enemy(self, position: (int, int)) -> Optional[Enemy]:
         return self.__enemy_map[position]
