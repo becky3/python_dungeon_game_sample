@@ -29,9 +29,5 @@ class Event(ABC):
         self.__x += value[1]
 
     @abstractmethod
-    def update(self):
-        pass
-
-    @abstractmethod
     def draw(self):
         pass

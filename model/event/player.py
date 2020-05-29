@@ -6,6 +6,7 @@ from const import Direction, Color
 from game.game_info import GameInfo
 from game.game_system import GameSystem
 from model.item import Item
+from model.mover import Mover
 from model.dungeon import Dungeon
 from model.draw_object.text import Text
 from model.draw_object.image import Image
@@ -65,8 +66,7 @@ class Player(Event):
         self.__event_map: Matrix = None
         self.__game_system = game_system
         self.__game_info = game_info
-        self.__walk_frame = 2
-        self.__walk_plan = []
+        self.__mover = Mover()
         self.__anime_frame = 0
         self.__pre_direction = Direction.NEWTRAL
         self.__next_position: (int, int) = None
@@ -102,6 +102,7 @@ class Player(Event):
         self.__bom = 0
 
     # TODO: __init__で設定したい
+
     def set_event_map(self, event_map: Matrix):
         self.__event_map = event_map
 
@@ -125,13 +126,13 @@ class Player(Event):
         if item_type == Item.Type.BOM:
             self.__bom += 1
             return
-        if item_type == Item.Type.FOOD_SPOILED:
+        if item_type == Item.Type.SA_SPOILED:
             self.__satiation = int(self.__satiation / 2)
             return
-        if item_type == Item.Type.FOOD_ADD_20:
+        if item_type == Item.Type.SA_ADD_20:
             self.__satiation += 20
             return
-        if item_type == Item.Type.FOOD_ADD_100:
+        if item_type == Item.Type.SA_ADD_100:
             self.__satiation += 100
             return
 
@@ -209,8 +210,7 @@ class Player(Event):
         self.__hungry_by_move()
         self.__pre_direction = direction
 
-        one_value = 1.0 / float(self.__walk_frame)
-        self.__walk_plan = [one_value] * self.__walk_frame
+        self.__mover.ready()
 
         return True
 
@@ -226,13 +226,13 @@ class Player(Event):
     def __do_move(self):
         self.__anime_frame += 1
         y, x = self.__direction
-        value = self.__walk_plan.pop()
+        value = self.__mover.get_next_plan()
         position = (
             self.y + float(y) * value,
             self.x + float(x) * value
         )
         self.set_position(position)
-        if len(self.__walk_plan) == 0:
+        if not self.__mover.have_plan():
             self.__moved()
 
     def __moved(self):
@@ -287,7 +287,7 @@ class Player(Event):
     def set_direction(self, direction: int):
         self.__direction = direction
 
-    def update(self):
+    def move(self):
 
         if self.__next_position is None:
             return

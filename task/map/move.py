@@ -19,7 +19,7 @@ class Move(Task):
         event_manager = mm.event_manager
         player = mm.player
 
-        player.update()
+        player.move()
 
         if player.is_moving():
             return

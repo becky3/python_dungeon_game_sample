@@ -53,7 +53,7 @@ class EventManager:
     def enemy_update(self):
         for enemy in self.__enemy_map.get_not_empty_values():
             old_position = enemy.map_coordinate
-            enemy.update()
+            enemy.move()
             if old_position == enemy.map_coordinate:
                 continue
             self.__enemy_map[enemy.map_coordinate] = enemy

@@ -57,6 +57,9 @@ class Enemy(Event):
         self.__player = player
         self.__game_system = game_system
         self.__game_info = game_info
+        self.__walk_frame = 2
+        self.__walk_plan = []
+        self.__anime_frame = 0
         self.__character_chip = CharacterChip(
             (16, 16),
             (16 * 10, 16 * 10),
@@ -109,7 +112,7 @@ class Enemy(Event):
 
         return True
 
-    def __get_move_position(self) -> (int, int):
+    def __get_next_position(self) -> (int, int):
 
         reach_y, reach_x = self.__get_player_reach()
         if abs(reach_y) <= self.__search_size \
@@ -161,22 +164,22 @@ class Enemy(Event):
             return None
 
         item_type = random.choice([
-            Item.Type.FOOD_ADD_20,
-            Item.Type.FOOD_ADD_20,
-            Item.Type.FOOD_ADD_20,
-            Item.Type.FOOD_ADD_20,
-            Item.Type.FOOD_ADD_100,
+            Item.Type.SA_ADD_20,
+            Item.Type.SA_ADD_20,
+            Item.Type.SA_ADD_20,
+            Item.Type.SA_ADD_20,
+            Item.Type.SA_ADD_100,
         ])
 
         return Item(item_type)
 
-    def update(self):
-        new_position = self.__get_move_position()
+    def move(self):
+        next_position = self.__get_next_position()
 
-        if not self.__can_move(new_position):
+        if not self.__can_move(next_position):
             return
 
-        self.set_position(new_position)
+        self.set_position(next_position)
 
     def __draw_bar(self, position: (int, int)):
         game_system = self.__game_system
