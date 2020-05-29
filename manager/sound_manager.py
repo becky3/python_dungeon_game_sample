@@ -5,8 +5,8 @@ from manager.resource_manager import ResourceManager
 
 class Music:
     TITLE = "resource/music/title.ogg"
-    DUNGEON = "resource/music/title.ogg"
-    GAME_OVER = "resource/music/title.ogg"
+    DUNGEON = "resource/music/dungeon.ogg"
+    GAME_OVER = "resource/music/game_over.ogg"
 
 
 class SE:
@@ -18,7 +18,6 @@ class SE:
     BOM = "resource/se/bom.wav"
     POTION = "resource/se/potion.wav"
     LEVEL_UP = "resource/se/level_up.wav"
-    START = "resource/se/start.wav"
     BUMP = "resource/se/bump.wav"
 
 

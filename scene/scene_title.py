@@ -28,7 +28,7 @@ class SceneTitle(Scene):
 
     def update(self):
         if InputManager.isPush(Key.SPACE):
-            super().game_system.play_se(SE.START)
+            super().game_system.play_se(SE.CHANGE_FLOOR)
             self.__next_scene = SceneMap()
 
     def draw(self):
@@ -46,7 +46,7 @@ class SceneTitle(Scene):
         game_system.add_draw_object(image)
 
         if hi_score_floor >= 2:
-            floor_text = "You reached floor {}.".format(hi_score_floor)
+            floor_text = "HI SCORE : B {} F".format(hi_score_floor)
             game_system.add_draw_object(
                 Text(
                     floor_text,
