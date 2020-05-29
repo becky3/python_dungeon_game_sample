@@ -104,8 +104,6 @@ class Enemy(Event):
 
         y, x = position
 
-        print("position:{}".format(position))
-
         if floor_map[y, x] > 3:
             return False
 

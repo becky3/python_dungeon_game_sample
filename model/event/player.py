@@ -154,7 +154,7 @@ class Player(Event):
 
     def use_item(self, item: Item):
         if item.item_type == Item.Type.POTION:
-            self.__add_hp(300)
+            self.__add_hp(500)
             self.__potion -= 1
             if self.__potion <= 0:
                 self.__potion = 0

@@ -18,18 +18,6 @@ class InputWait(Task):
     def __isPush(self, key: int) -> bool:
         return InputManager.isPush(key)
 
-    def __get_push_direction(self) -> int:
-
-        if self.__isPush(Key.UP):
-            return Direction.UP
-        if self.__isPush(Key.RIGHT):
-            return Direction.RIGHT
-        if self.__isPush(Key.DOWN):
-            return Direction.DOWN
-        if self.__isPush(Key.LEFT):
-            return Direction.LEFT
-        return Direction.NEWTRAL
-
     def start(self):
         pass
 
@@ -55,7 +43,7 @@ class InputWait(Task):
             )
             return
 
-        direction = self.__get_push_direction()
+        direction = InputManager.get_push_direction()
         if player.ready_move(direction):
             mm.event_manager.ready_move_enemys()
             from task.map.move import Move

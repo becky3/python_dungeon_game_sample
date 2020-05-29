@@ -24,7 +24,7 @@ class LevelUp(Task):
 
     def update(self):
 
-        if self.__map_manager.game_system.timer == 50:
+        if self.__map_manager.game_system.timer == 30:
             from task.map.input_wait import InputWait
             self.__next_task = InputWait(self.__map_manager)
 

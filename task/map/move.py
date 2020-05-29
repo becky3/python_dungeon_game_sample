@@ -1,6 +1,9 @@
 from typing import Optional
 
+from const import Direction
 from manager.map_manager import MapManager
+from manager.input_manager import InputManager
+from manager.sound_manager import SE
 from task.task import Task
 
 
@@ -49,6 +52,13 @@ class Move(Task):
                 treasure_box
             )
             return
+
+        direction = InputManager.get_push_direction()
+        if player.ready_move(direction):
+            mm.event_manager.ready_move_enemys()
+            return
+        elif direction != Direction.NEWTRAL:
+            self.__map_manager.game_system.play_se(SE.BUMP)
 
         from task.map.input_wait import InputWait
         self.__next_task = InputWait(self.__map_manager)
