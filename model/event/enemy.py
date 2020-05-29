@@ -44,6 +44,10 @@ class Enemy(Event):
     def strength(self) -> int:
         return self.__strength
 
+    @property
+    def next_position(self) -> (int, int):
+        return self.__next_position
+
     def __init__(self,
                  position: (int, int),
                  game_system: GameSystem,
