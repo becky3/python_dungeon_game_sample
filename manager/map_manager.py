@@ -59,17 +59,43 @@ class MapManager:
         self.event_manager.create_events(dungeon)
 
     def draw_floor_info(self):
+
+        game_system = self.game_system
+        game_info = self.__game_info
+
         floor_text = "({},{})".format(
             self.player.map_coordinate[0],
             self.player.map_coordinate[1]
         )
 
-        self.game_system.add_draw_object(
+        game_system.add_draw_object(
             Text(
                 floor_text,
                 (8, 8),
                 Color.WHITE,
                 Text.FontSize.SMALL
+            )
+        )
+
+        speed_text = "[S]peed "+str(game_system.speed)
+        game_system.add_draw_object(
+            Text(
+                speed_text,
+                (100, 8),
+                Color.WHITE,
+                Text.FontSize.SMALL
+            )
+        )
+        if game_info.floor_info_view_time <= 0:
+            return
+
+        game_info.decrement_floor_info_view_time()
+        floor_info_text = "B {} F".format(game_info.floor)
+        game_system.add_draw_object(
+            Text(
+                floor_info_text,
+                (56, 40),
+                Color.CYAN
             )
         )
 

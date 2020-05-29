@@ -1,7 +1,3 @@
-from const import Color
-
-from model.draw_object.text import Text
-
 from scene.scene import Scene
 from task.task import Task
 from task.map.initialize import Initialize
@@ -45,30 +41,6 @@ class SceneMap(Scene):
 
     def draw(self):
         self.__task.draw()
-
-        game_info = super().game_info
-        game_system = super().game_system
-
-        # TODO: ここの描画処理はタスクに持たせる
-        if game_info.floor_info_view_time > 0:
-            game_info.decrement_floor_info_view_time()
-            floor_info_text = "B {} F".format(game_info.floor)
-            game_system.add_draw_object(
-                Text(
-                    floor_info_text,
-                    (56, 40),
-                    Color.CYAN
-                )
-            )
-        speed_text = "[S]peed "+str(game_system.speed)
-        game_system.add_draw_object(
-            Text(
-                speed_text,
-                (100, 8),
-                Color.WHITE,
-                Text.FontSize.SMALL
-            )
-        )
 
     def exit(self):
         pass
