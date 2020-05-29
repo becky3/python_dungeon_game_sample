@@ -1,14 +1,12 @@
 from const import Color
-from model.dungeon import Dungeon
+
 from model.draw_object.text import Text
-from model.event.player import Player
-from manager.event_manager import EventManager
-from manager.sound_manager import Music
-from manager.map_manager import MapManager
+
 from scene.scene import Scene
 from task.task import Task
-from task.map.input_wait import InputWait
+from task.map.initialize import Initialize
 from task.map.scene_to_title import SceneToTitle
+from manager.map_manager import MapManager
 
 
 class SceneMap(Scene):
@@ -17,50 +15,16 @@ class SceneMap(Scene):
         super().__init__()
         self.__next_scene = None
         self.__task: Task = None
-        self.__map_manager = None
+        self.__map_manager = MapManager()
 
     def start(self):
 
-        # TODO: この辺の処理は初期化タスクでやりたい
-        game_system = super().game_system
-        game_info = super().game_info
-
-        dungeon = Dungeon(
-            game_info=game_info,
-            maze_height=9,
-            maze_width=11,
-            room_size=3
+        self.__task = Initialize(
+            super().game_system,
+            super().game_info,
+            self.__map_manager
         )
-
-        player = Player(
-            (0, 0),
-            game_system,
-            game_info,
-            dungeon
-        )
-
-        event_manager = EventManager(
-            game_system,
-            game_info,
-            player
-        )
-
-        self.__map_manager = MapManager(
-            game_system,
-            game_info,
-            dungeon,
-            event_manager,
-            player
-        )
-
-        game_info.reset_floor()
-        self.__map_manager.init_floor()
-
-        player.reset_status()
-
-        game_system.play_music(Music.DUNGEON)
-
-        self.__task = InputWait(self.__map_manager)
+        self.__task.start()
 
     def update(self):
         from scene.scene_title import SceneTitle
@@ -85,6 +49,7 @@ class SceneMap(Scene):
         game_info = super().game_info
         game_system = super().game_system
 
+        # TODO: ここの描画処理はタスクに持たせる
         if game_info.floor_info_view_time > 0:
             game_info.decrement_floor_info_view_time()
             floor_info_text = "B {} F".format(game_info.floor)
@@ -106,7 +71,7 @@ class SceneMap(Scene):
         )
 
     def exit(self):
-        print("title end")
+        pass
 
     def get_next_scene(self):
         return self.__next_scene

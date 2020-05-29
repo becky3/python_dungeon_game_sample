@@ -12,18 +12,45 @@ from const import Color
 
 class MapManager:
 
-    def __init__(self,
-                 game_system: GameSystem,
-                 game_info: GameInfo,
-                 dungeon: Dungeon,
-                 event_manager: EventManager,
-                 player: Player
-                 ):
-        self.game_system = game_system
-        self.game_info = game_info
-        self.dungeon = dungeon
-        self.event_manager = event_manager
-        self.player = player
+    @property
+    def game_system(self) -> GameSystem:
+        return self.__game_system
+
+    @property
+    def game_info(self) -> GameInfo:
+        return self.__game_info
+
+    @property
+    def dungeon(self) -> Dungeon:
+        return self.__dungeon
+
+    @property
+    def event_manager(self) -> EventManager:
+        return self.__event_manager
+
+    @property
+    def player(self) -> Player:
+        return self.__player
+
+    def __init__(self):
+        self.__game_system = None
+        self.__game_info = None
+        self.__dungeon = None
+        self.__event_manager = None
+        self.__player = None
+
+    def set_references(self,
+                       game_system: GameSystem,
+                       game_info: GameInfo,
+                       dungeon: Dungeon,
+                       event_manager: EventManager,
+                       player: Player
+                       ):
+        self.__game_system = game_system
+        self.__game_info = game_info
+        self.__dungeon = dungeon
+        self.__event_manager = event_manager
+        self.__player = player
 
     def init_floor(self):
         dungeon = self.dungeon
