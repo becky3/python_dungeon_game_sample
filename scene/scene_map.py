@@ -57,7 +57,6 @@ class SceneMap(Scene):
         self.__map_manager.init_floor()
 
         player.reset_status()
-        player.set_event_map(event_manager.enemy_map)
 
         game_system.play_music(Music.DUNGEON)
 
