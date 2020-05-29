@@ -1,7 +1,6 @@
 import math
 import random
 
-from libs.matrix import Matrix
 from const import Direction, Color
 from game.game_info import GameInfo
 from game.game_system import GameSystem
@@ -63,7 +62,6 @@ class Player(Event):
         super().__init__(position)
 
         self.__dungeon = dungeon
-        self.__event_map: Matrix = None
         self.__game_system = game_system
         self.__game_info = game_info
         self.__mover = Mover()
@@ -100,11 +98,6 @@ class Player(Event):
         self.__satiation = 300
         self.__potion = 0
         self.__bom = 0
-
-    # TODO: __init__で設定したい
-
-    def set_event_map(self, event_map: Matrix):
-        self.__event_map = event_map
 
     def __hungry_by_move(self):
         if self.__satiation <= 0:

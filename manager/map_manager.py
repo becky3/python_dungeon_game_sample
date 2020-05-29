@@ -12,18 +12,45 @@ from const import Color
 
 class MapManager:
 
-    def __init__(self,
-                 game_system: GameSystem,
-                 game_info: GameInfo,
-                 dungeon: Dungeon,
-                 event_manager: EventManager,
-                 player: Player
-                 ):
-        self.game_system = game_system
-        self.game_info = game_info
-        self.dungeon = dungeon
-        self.event_manager = event_manager
-        self.player = player
+    @property
+    def game_system(self) -> GameSystem:
+        return self.__game_system
+
+    @property
+    def game_info(self) -> GameInfo:
+        return self.__game_info
+
+    @property
+    def dungeon(self) -> Dungeon:
+        return self.__dungeon
+
+    @property
+    def event_manager(self) -> EventManager:
+        return self.__event_manager
+
+    @property
+    def player(self) -> Player:
+        return self.__player
+
+    def __init__(self):
+        self.__game_system = None
+        self.__game_info = None
+        self.__dungeon = None
+        self.__event_manager = None
+        self.__player = None
+
+    def set_references(self,
+                       game_system: GameSystem,
+                       game_info: GameInfo,
+                       dungeon: Dungeon,
+                       event_manager: EventManager,
+                       player: Player
+                       ):
+        self.__game_system = game_system
+        self.__game_info = game_info
+        self.__dungeon = dungeon
+        self.__event_manager = event_manager
+        self.__player = player
 
     def init_floor(self):
         dungeon = self.dungeon
@@ -32,17 +59,43 @@ class MapManager:
         self.event_manager.create_events(dungeon)
 
     def draw_floor_info(self):
+
+        game_system = self.game_system
+        game_info = self.__game_info
+
         floor_text = "({},{})".format(
             self.player.map_coordinate[0],
             self.player.map_coordinate[1]
         )
 
-        self.game_system.add_draw_object(
+        game_system.add_draw_object(
             Text(
                 floor_text,
                 (8, 8),
                 Color.WHITE,
                 Text.FontSize.SMALL
+            )
+        )
+
+        speed_text = "[S]peed "+str(game_system.speed)
+        game_system.add_draw_object(
+            Text(
+                speed_text,
+                (100, 8),
+                Color.WHITE,
+                Text.FontSize.SMALL
+            )
+        )
+        if game_info.floor_info_view_time <= 0:
+            return
+
+        game_info.decrement_floor_info_view_time()
+        floor_info_text = "B {} F".format(game_info.floor)
+        game_system.add_draw_object(
+            Text(
+                floor_info_text,
+                (56, 40),
+                Color.CYAN
             )
         )
 
