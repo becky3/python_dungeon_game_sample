@@ -19,7 +19,8 @@ class Move(Task):
         event_manager = mm.event_manager
         player = mm.player
 
-        player.update()
+        player.move()
+        event_manager.move_enemys()
 
         if player.is_moving():
             return
@@ -34,8 +35,6 @@ class Move(Task):
             from task.map.battle import Battle
             self.__next_task = Battle(mm, enemy)
             return
-
-        event_manager.enemy_update()
 
         if event_manager.is_floor_clear():
             from task.map.change_floor import ChangeFloor

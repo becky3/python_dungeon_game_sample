@@ -19,9 +19,6 @@ class Stairs(Event):
         self.__game_system = game_system
         self.__game_info = game_info
 
-    def update(self):
-        pass
-
     def __get_image(self, index: int, position: (int, int)) -> Image:
         converted_position = self.__game_info.convert_map_to_display(
             position

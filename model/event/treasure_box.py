@@ -24,7 +24,7 @@ class TreasureBox(Event):
             Item.Type.BOM,
             Item.Type.BOM,
             Item.Type.BOM,
-            Item.Type.FOOD_SPOILED,
+            Item.Type.SA_SPOILED,
         ])
         return Item(item_type)
 
@@ -40,9 +40,6 @@ class TreasureBox(Event):
 
     def get_item(self) -> Item:
         return self.__item
-
-    def update(self):
-        pass
 
     def __get_image(self, index: int, position: (int, int)) -> Image:
         converted_position = self.__game_info.convert_map_to_display(

@@ -16,7 +16,7 @@ class GetItem(Task):
     def start(self):
         item = self.__item
         se = SE.GOOD_ITEM
-        if item.item_type == Item.Type.FOOD_SPOILED:
+        if item.item_type == Item.Type.SA_SPOILED:
             se = SE.BAD_ITEM
 
         mm = self.__map_manager

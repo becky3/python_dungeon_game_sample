@@ -12,19 +12,19 @@ class Item():
     class Type:
         POTION = 0
         BOM = 1
-        FOOD_SPOILED = 2
-        FOOD_ADD_20 = 3
-        FOOD_ADD_100 = 4
+        SA_SPOILED = 2
+        SA_ADD_20 = 3
+        SA_ADD_100 = 4
 
     __IMAGE = "resource/image/item.png"
     __CHIP = Chip((16, 16), (16 * 8, 16 * 8))
 
     __NAMES = [
         "Potion",
-        "Blaze gem",
-        "Food spoiled.",
-        "Food +20",
-        "Food +100",
+        "Bom",
+        "SA spoil",
+        "SA +20",
+        "SA +100",
     ]
 
     @property
@@ -51,13 +51,13 @@ class Item():
         center_y = height / 2
 
         image = self.__get_image(
-            (center_x - 42, center_y - 36)
+            (center_x - 28, center_y - 36)
         )
         game_system.add_draw_object(image)
         game_system.add_draw_object(
             Text(
                 self.__name,
-                (center_x - 24, center_y - 32),
+                (center_x - 10, center_y - 32),
                 Color.WHITE,
                 Text.FontSize.SMALL
             )
