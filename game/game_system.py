@@ -23,7 +23,7 @@ class GameSystem():
     def __init__(self):
         super().__init__()
         self.__timer = 0
-        self.__speed = 4
+        self.__speed = 1
         self.__display: pygame.display = None
         self.__sound_manager = SoundManager()
         self.__camera: Camera = None
@@ -49,7 +49,7 @@ class GameSystem():
 
     def add_speed(self):
         self.__speed += 1
-        if self.__speed >= 10:
+        if self.__speed > 4:
             self.__speed = 1
 
     def reset_timer(self):
@@ -67,7 +67,7 @@ class GameSystem():
             surface
         )
         pygame.display.update()
-        self.__clock.tick(4 + 2 * self.__speed)
+        self.__clock.tick((self.__speed - 1) * 2 + 8)
 
     def quit(self):
         pygame.quit()

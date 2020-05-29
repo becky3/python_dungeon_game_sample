@@ -40,7 +40,7 @@ class ChangeFloor(Task):
             )
         if timer == 5:
             game_info.add_floor()
-            mm.game_info.set_welcome_view_time(15)
+            mm.game_info.set_floor_info_view_time(15)
             mm.init_floor()
         if 6 <= timer <= 9:
             h = one_height * (10 - timer)

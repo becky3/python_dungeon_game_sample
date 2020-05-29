@@ -9,8 +9,8 @@ class GameInfo():
         return self.__hi_score_floor
 
     @property
-    def welcome_view_time(self) -> int:
-        return self.__welcome_view_time
+    def floor_info_view_time(self) -> int:
+        return self.__floor_info_view_time
 
     @property
     def screen_chip_rows(self) -> int:
@@ -27,7 +27,7 @@ class GameInfo():
         super().__init__()
         self.__floor = 1
         self.__hi_score_floor = 1
-        self.__welcome_view_time = 0
+        self.__floor_info_view_time = 0
         self.__map_chip_size = map_chip_size
         self.__screen_chip_nums = screen_chip_nums
 
@@ -39,13 +39,13 @@ class GameInfo():
         if self.__floor > self.hi_score_floor:
             self.__hi_score_floor = self.__floor
 
-    def set_welcome_view_time(self, time: int):
-        self.__welcome_view_time = time
+    def set_floor_info_view_time(self, time: int):
+        self.__floor_info_view_time = time
 
-    def decrement_welcome_view_time(self):
-        self.__welcome_view_time -= 1
-        if self.__welcome_view_time <= 0:
-            self.__welcome_view_time = 0
+    def decrement_floor_info_view_time(self):
+        self.__floor_info_view_time -= 1
+        if self.__floor_info_view_time <= 0:
+            self.__floor_info_view_time = 0
 
     def convert_map_to_display(self, coordinate: (int, int)) -> (int, int):
         width, height = self.__map_chip_size

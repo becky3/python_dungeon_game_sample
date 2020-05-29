@@ -86,13 +86,13 @@ class SceneMap(Scene):
         game_info = super().game_info
         game_system = super().game_system
 
-        if game_info.welcome_view_time > 0:
-            game_info.decrement_welcome_view_time()
-            welcome_text = "Welcome to floor {}.".format(game_info.floor)
+        if game_info.floor_info_view_time > 0:
+            game_info.decrement_floor_info_view_time()
+            floor_info_text = "B {} F".format(game_info.floor)
             game_system.add_draw_object(
                 Text(
-                    welcome_text,
-                    (20, 40),
+                    floor_info_text,
+                    (56, 40),
                     Color.CYAN
                 )
             )
