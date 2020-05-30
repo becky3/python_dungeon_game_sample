@@ -127,8 +127,8 @@ class MapManager:
 
         texts = [
             "B{}F".format(floor),
-            "LV {}".format(player.level),
-            "STR {}".format(player.strength)
+            "LV {}".format(player.stats.level),
+            "STR {}".format(player.stats.strength)
         ]
 
         text = "  ".join(texts)
@@ -146,16 +146,16 @@ class MapManager:
 
         x, y = base_position
 
-        player = self.player
+        stats = self.player.stats
 
         texts = [
-            "HP {}/{}".format(player.hp, player.max_hp),
-            "SA {}".format(player.satiation)
+            "HP {}/{}".format(stats.hp, stats.max_hp),
+            "SA {}".format(stats.satiation)
         ]
 
         text = " ".join(texts)
         color = Color.WHITE
-        if player.hp / player.max_hp < 0.2 or player.hp <= 10:
+        if stats.hp / stats.max_hp < 0.2 or stats.hp <= 10:
             color = Color.RED
 
         self.game_system.add_draw_object(
@@ -172,11 +172,11 @@ class MapManager:
         x = base_position[0] + 96
         y = base_position[1]
 
-        player = self.player
+        stats = self.player.stats
 
         self.game_system.add_draw_object(
             Text(
-                "[ P ] {}".format(player.potion),
+                "[ P ] {}".format(stats.potion),
                 (x, y),
                 Color.GREEN,
                 Text.FontSize.SMALL
@@ -185,7 +185,7 @@ class MapManager:
 
         self.game_system.add_draw_object(
             Text(
-                "[ B ] {}".format(player.bom),
+                "[ B ] {}".format(stats.bom),
                 (x, y + 12),
                 Color.GREEN,
                 Text.FontSize.SMALL

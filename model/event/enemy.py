@@ -152,8 +152,11 @@ class Enemy(Event):
         return (y - player_y, x - player_x)
 
     def battle(self):
-        damage = self.__player.strength
-        + random.randint(1, math.floor(self.__player.level * 1.2) + 5)
+        damage = self.__player.stats.strength
+        + random.randint(
+            1,
+            math.floor(self.__player.stats.level * 1.2) + 5
+        )
         self.add_hp(-damage)
         self.__pre_damage = damage
         self.__damage_view_time = 10

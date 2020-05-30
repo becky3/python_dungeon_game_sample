@@ -58,7 +58,7 @@ class Initialize(Task):
         game_info.reset_floor()
         self.__map_manager.init_floor()
 
-        player.reset_status()
+        player.reset_stats()
 
         game_system.play_music(Music.DUNGEON)
 

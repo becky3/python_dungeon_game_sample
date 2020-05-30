@@ -29,14 +29,16 @@ class WaitInput(Task):
         if InputManager.isPush(Key.s):
             game_system.add_speed()
 
-        if InputManager.isPush(Key.p) and player.potion > 0:
+        if InputManager.isPush(Key.p) \
+                and player.stats.potion > 0:
             from task.map.use_item import UseItem
             self.__next_task = UseItem(
                 self.__map_manager, Item(Item.Type.POTION)
             )
             return
 
-        if InputManager.isPush(Key.b) and player.bom > 0:
+        if InputManager.isPush(Key.b) \
+                and player.stats.bom > 0:
             from task.map.use_item import UseItem
             self.__next_task = UseItem(
                 self.__map_manager, Item(Item.Type.BOM)
