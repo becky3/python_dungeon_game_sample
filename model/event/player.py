@@ -11,6 +11,7 @@ from model.draw_object.text import Text
 from model.draw_object.image import Image
 from model.character_chip import CharacterChip
 from model.event.event import Event
+from manager.debug_manager import DebugManager
 
 
 class Player(Event):
@@ -98,6 +99,11 @@ class Player(Event):
         self.__satiation = 300
         self.__potion = 0
         self.__bom = 0
+
+        if DebugManager.is_debug:
+
+            for _ in range(1, DebugManager.debug_level):
+                self.level_up()
 
     def __hungry_by_move(self):
         if self.__satiation <= 0:
