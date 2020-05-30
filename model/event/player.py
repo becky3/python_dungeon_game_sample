@@ -162,7 +162,12 @@ class Player(Event):
 
         next_position = self.__get_next_position(direction)
 
-        if self.__dungeon.floor_map[next_position] == 9:
+        floor_map = self.__dungeon.floor_map
+
+        if not floor_map.is_in(next_position):
+            return False
+
+        if floor_map[next_position] == 9:
             return False
 
         return True
