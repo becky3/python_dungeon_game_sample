@@ -35,9 +35,9 @@ class GameInfo():
         self.__screen_chip_nums = screen_chip_nums
 
     def reset_floor(self):
-        self.__floor = 10
+        self.__floor = 1
         if DebugManager.is_debug:
-            self.__floor = DebugManager.debug_floor
+            self.__floor = DebugManager.floor
 
     def add_floor(self):
         self.__floor += 1

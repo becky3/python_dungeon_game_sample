@@ -18,11 +18,13 @@ from model.event.player import Player
 from model.draw_object.image import Image
 from model.draw_object.text import Text
 from model.draw_object.rect import Rect
+from manager.debug_manager import DebugManager
 
 
 class Enemy(Event):
 
     __IMAGE = "resource/image/enemy.png"
+    __MAX_ENEMY_TYPE = 10
 
     @property
     def level(self) -> int:
@@ -83,16 +85,18 @@ class Enemy(Event):
         self.__search_size = search_size
 
         max_enemy_type = math.ceil(floor / 3)
+        if max_enemy_type > self.__MAX_ENEMY_TYPE - 1:
+            max_enemy_type = self.__MAX_ENEMY_TYPE - 1
         self.type = random.randint(0, max_enemy_type)
-        if max_enemy_type >= 10:
-            self.type = random.randint(0, 10)
-
-        self.__level = random.randint(1, floor)
+        min_level = math.ceil(floor / 2)
+        self.__level = random.randint(min_level, floor)
         self.__name = str(self.level)
-        self.__max_hp = 60 * (self.type + 1) + (self.level - 1) * 10
+        self.__max_hp = 60 * \
+            (self.type + math.ceil(self.level / 2)) + \
+            (self.level - 1) * 10
         self.__hp = self.max_hp
         self.__strength = math.ceil(self.max_hp/8)
-        self.__debug_text = "-"
+        self.__debug_text = "{}".format(self.__max_hp)
 
         self.__character_chip.set_character_no(self.type)
         self.__pre_damage = 0
@@ -148,8 +152,8 @@ class Enemy(Event):
         return (y - player_y, x - player_x)
 
     def battle(self):
-        damage = self.__player.strength \
-            + random.randint(1, self.__player.level * 2 + 5)
+        damage = self.__player.strength
+        + random.randint(1, math.floor(self.__player.level * 1.2) + 5)
         self.add_hp(-damage)
         self.__pre_damage = damage
         self.__damage_view_time = 10
@@ -167,7 +171,7 @@ class Enemy(Event):
 
     def get_item(self) -> Optional[Item]:
 
-        if random.random() < 0.7:
+        if random.random() < 0.8:
             return None
 
         item_type = random.choice([
@@ -259,7 +263,8 @@ class Enemy(Event):
         x = position[0]
         y = position[1] + self.height - 8
         text = self.name
-        # text = self.__debug_text
+        if DebugManager.is_debug:
+            text += " " + self.__debug_text
 
         text1 = Text(
             text,

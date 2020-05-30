@@ -1,5 +1,9 @@
 class DebugManager():
 
-    is_debug = True
-    debug_level = 10
-    debug_floor = 10
+    is_debug = False
+
+    __test = 50
+    level = __test
+    floor = __test
+    potion = __test
+    bom = __test
