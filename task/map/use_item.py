@@ -43,8 +43,8 @@ class UseItem(Task):
         if self.__map_manager.game_system.timer < 8:
             return
 
-        from task.map.input_wait import InputWait
-        self.__next_task = InputWait(self.__map_manager)
+        from task.map.wait_input import WaitInput
+        self.__next_task = WaitInput(self.__map_manager)
 
     def __bom_update(self):
         mm = self.__map_manager
@@ -63,8 +63,8 @@ class UseItem(Task):
             self.__next_task = LevelUp(mm)
             return
 
-        from task.map.input_wait import InputWait
-        self.__next_task = InputWait(self.__map_manager)
+        from task.map.wait_input import WaitInput
+        self.__next_task = WaitInput(self.__map_manager)
 
     def draw(self):
 

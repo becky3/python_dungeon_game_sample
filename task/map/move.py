@@ -60,8 +60,8 @@ class Move(Task):
         elif direction != Direction.NEWTRAL:
             self.__map_manager.game_system.play_se(SE.BUMP)
 
-        from task.map.input_wait import InputWait
-        self.__next_task = InputWait(self.__map_manager)
+        from task.map.wait_input import WaitInput
+        self.__next_task = WaitInput(self.__map_manager)
 
     def draw(self):
         mm = self.__map_manager

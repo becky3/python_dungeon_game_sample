@@ -51,8 +51,8 @@ class Battle(Task):
                 self.__next_task = GameOver(mm)
                 return
 
-        from task.map.input_wait import InputWait
-        self.__next_task = InputWait(mm)
+        from task.map.wait_input import WaitInput
+        self.__next_task = WaitInput(mm)
 
     def draw(self):
         mm = self.__map_manager

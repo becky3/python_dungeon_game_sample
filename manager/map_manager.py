@@ -57,6 +57,7 @@ class MapManager:
         dungeon.create()
         self.player.setup_start_position()
         self.event_manager.create_events(dungeon)
+        self.game_info.set_floor_info_view_time(10)
 
     def draw_floor_info(self):
 

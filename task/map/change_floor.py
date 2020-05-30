@@ -3,7 +3,7 @@ from typing import Optional
 from manager.map_manager import MapManager
 from manager.sound_manager import SE
 from task.task import Task
-from model.draw_object.rect import Rect
+from model.effect.close_wipe import CloseWipe
 
 
 class ChangeFloor(Task):
@@ -11,6 +11,7 @@ class ChangeFloor(Task):
     def __init__(self, map_manager: MapManager):
         self.__map_manager = map_manager
         self.__next_task: Task = None
+        self.__effect = CloseWipe(map_manager.game_system)
 
     def start(self):
         self.__map_manager.game_system.play_se(
@@ -18,41 +19,18 @@ class ChangeFloor(Task):
         )
 
     def update(self):
-
-        if self.__map_manager.game_system.timer == 10:
-            from task.map.input_wait import InputWait
-            self.__next_task = InputWait(self.__map_manager)
+        self.__effect.update()
+        if self.__effect.isEnd():
+            from task.map.wait_input import WaitInput
+            self.__next_task = WaitInput(self.__map_manager)
 
     def draw(self):
-        mm = self.__map_manager
-        game_system = mm.game_system
-        game_info = mm.game_info
-        timer = mm.game_system.timer
-        one_height = 144 / 10
-
-        if 1 <= timer <= 5:
-            h = one_height * timer
-            game_system.add_draw_object(
-                Rect((0, 0), (144, h), is_absolute_position=True)
-            )
-            game_system.add_draw_object(
-                Rect((0, 144-h), (144, h), is_absolute_position=True)
-            )
-        if timer == 5:
-            game_info.add_floor()
-            mm.game_info.set_floor_info_view_time(15)
-            mm.init_floor()
-        if 6 <= timer <= 9:
-            h = one_height * (10 - timer)
-            game_system.add_draw_object(
-                Rect((0, 0), (144, h), is_absolute_position=True)
-            )
-            game_system.add_draw_object(
-                Rect((0, 144-h), (144, h), is_absolute_position=True)
-            )
+        self.__effect.draw()
 
     def exit(self):
-        pass
+        mm = self.__map_manager
+        mm.game_info.add_floor()
+        mm.init_floor()
 
     def get_next_task(self) -> Optional[Task]:
         return self.__next_task
