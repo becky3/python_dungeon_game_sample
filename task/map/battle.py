@@ -27,7 +27,7 @@ class Battle(Task):
 
         enemy.battle()
 
-        if enemy.is_die():
+        if enemy.stats.is_die():
             game_system.play_se(SE.ENEMY_DOWN)
             item = enemy.get_item()
             event_manager.remove_enemy(enemy)
@@ -46,7 +46,7 @@ class Battle(Task):
             player.battle(enemy)
             player.back()
 
-            if player.is_die():
+            if player.stats.is_die():
                 from task.map.game_over import GameOver
                 self.__next_task = GameOver(mm)
                 return

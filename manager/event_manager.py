@@ -39,7 +39,6 @@ class EventManager:
         self.__treasure_map = Matrix()
         self.__stair: Stairs = None
 
-    # is_dieをまとめて削除する
     def remove_enemy(self, event: Event):
         self.__enemy_map[event.map_coordinate] = None
 

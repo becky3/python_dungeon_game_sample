@@ -54,18 +54,14 @@ class Player(Event):
         self.__damage_view_time = 0
         self.__stats = self.__get_default_stats()
 
-    def __get_default_stats(self):
+    def __get_default_stats(self) -> Stats:
         return Stats(
             level=1,
             max_hp=300,
             strength=100,
             satiation=300,
             potion=0,
-            bom=0,
-            limit_hp=999,
-            limit_level=99,
-            limit_strength=999,
-            limit_satiation=300
+            bom=0
         )
 
     def reset_stats(self):
@@ -73,12 +69,9 @@ class Player(Event):
 
         if DebugManager.is_debug:
             for _ in range(1, DebugManager.level):
-                self.level_up()
+                self.stats.level_up()
             self.stats.add_potion(DebugManager.potion)
             self.stats.add_bom(DebugManager.bom)
-
-    def is_die(self) -> bool:
-        return self.__stats.is_die()
 
     def add_item(self, item: Item):
         item_type = item.item_type
@@ -153,9 +146,6 @@ class Player(Event):
         )
         return next_position
 
-    def level_up(self):
-        self.stats.level_up()
-
     def ready_move(self, direction: (int, int)) -> bool:
 
         if not self.__can_move(direction):
@@ -200,7 +190,8 @@ class Player(Event):
     def battle(self, target_enemy: object):
         from model.event.enemy import Enemy
         enemy: Enemy = target_enemy
-        damage = enemy.strength + random.randint(1, enemy.level + 5)
+        damage = enemy.stats.strength \
+            + random.randint(1, enemy.stats.level + 5)
         self.__stats.damage(damage)
         self.__damage_view_time = 10
 
@@ -218,7 +209,7 @@ class Player(Event):
 
         from model.event.enemy import Enemy
         enemy: Enemy = target_enemy
-        return random.randint(0, enemy.max_hp) \
+        return random.randint(0, enemy.stats.max_hp) \
             > random.randint(0, self.stats.max_hp)
 
     def set_direction(self, direction: int):

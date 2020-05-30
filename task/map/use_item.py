@@ -129,9 +129,9 @@ class UseItem(Task):
 
         enemy: Enemy = enemy_map[position]
         if enemy is not None:
-            enemy.add_hp(-1000)
+            enemy.stats.damage(1000)
 
-            if enemy.is_die():
+            if enemy.stats.is_die():
                 event_manager.remove_enemy(enemy)
                 item = enemy.get_item()
 
