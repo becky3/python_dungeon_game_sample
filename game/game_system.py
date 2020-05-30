@@ -1,6 +1,7 @@
 import pygame
 
 from manager.sound_manager import SoundManager
+from manager.debug_manager import DebugManager
 from model.draw_object.draw_object import DrawObject
 from model.camera import Camera
 from const import Color
@@ -49,7 +50,10 @@ class GameSystem():
 
     def add_speed(self):
         self.__speed += 1
-        if self.__speed > 4:
+        if DebugManager.is_debug:
+            if self.__speed > 9:
+                self.__speed = 1
+        elif self.__speed > 4:
             self.__speed = 1
 
     def reset_timer(self):

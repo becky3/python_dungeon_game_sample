@@ -28,7 +28,10 @@ class SceneMap(Scene):
 
         from scene.scene_title import SceneTitle
         if isinstance(super().task, SceneToTitle):
-            self.__next_scene = SceneTitle()
+            self.__next_scene = SceneTitle(
+                self.game_system,
+                self.game_info
+            )
 
     def draw(self):
         super().draw()

@@ -1,6 +1,5 @@
 import random
 import math
-from typing import Callable
 
 from libs.matrix import Matrix
 from game.game_system import GameSystem
@@ -140,22 +139,25 @@ class Dungeon:
             for around_x in x_range:
                 map_x = center_x + around_x
                 map_y = center_y + around_y
-                if 0 <= map_x < width and 0 <= map_y < height:
-                    if floor_map[map_y, map_x] <= 3:
-                        floor = self.__get_image(
-                            FloorPattern.FLOOR,
+                if not floor_map.is_in((map_y, map_x)):
+                    continue
+
+                if floor_map[map_y, map_x] <= 3:
+                    floor = self.__get_image(
+                        FloorPattern.FLOOR,
+                        (map_x, map_y)
+                    )
+                    game_system.add_draw_object(floor)
+
+                if floor_map[map_y, map_x] == 9:
+                    wall2 = self.__get_image(
+                        FloorPattern.WALL2,
+                        (map_x, map_y)
+                    )
+                    game_system.add_draw_object(wall2)
+                    if map_y < height - 1 and floor_map[map_y+1, map_x] == 9:
+                        wall = self.__get_image(
+                            FloorPattern.WALL,
                             (map_x, map_y)
                         )
-                        game_system.add_draw_object(floor)
-                    if floor_map[map_y, map_x] == 9:
-                        wall2 = self.__get_image(
-                            FloorPattern.WALL2,
-                            (map_x, map_y)
-                        )
-                        game_system.add_draw_object(wall2)
-                        if map_y < height - 1 and floor_map[map_y+1, map_x] == 9:
-                            wall = self.__get_image(
-                                FloorPattern.WALL,
-                                (map_x, map_y)
-                            )
-                            game_system.add_draw_object(wall)
+                        game_system.add_draw_object(wall)

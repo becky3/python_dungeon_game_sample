@@ -1,6 +1,5 @@
 import math
 
-from const import Direction
 from model.chip import Chip
 
 

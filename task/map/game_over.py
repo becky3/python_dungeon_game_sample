@@ -50,7 +50,7 @@ class GameOver(Task):
                 Text(
                     "You died.",
                     (46, 40),
-                    Color.RED,
+                    Color.YELLOW,
                     Text.FontSize.SMALL
                 )
             )
@@ -58,7 +58,7 @@ class GameOver(Task):
                 Text(
                     "Game over.",
                     (46, 80),
-                    Color.RED,
+                    Color.YELLOW,
                     Text.FontSize.SMALL
                 )
             )

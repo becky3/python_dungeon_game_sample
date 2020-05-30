@@ -1,3 +1,6 @@
+from manager.debug_manager import DebugManager
+
+
 class GameInfo():
 
     @property
@@ -33,6 +36,8 @@ class GameInfo():
 
     def reset_floor(self):
         self.__floor = 1
+        if DebugManager.is_debug:
+            self.__floor = DebugManager.floor
 
     def add_floor(self):
         self.__floor += 1

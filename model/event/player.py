@@ -11,6 +11,7 @@ from model.draw_object.text import Text
 from model.draw_object.image import Image
 from model.character_chip import CharacterChip
 from model.event.event import Event
+from manager.debug_manager import DebugManager
 
 
 class Player(Event):
@@ -98,6 +99,12 @@ class Player(Event):
         self.__satiation = 300
         self.__potion = 0
         self.__bom = 0
+
+        if DebugManager.is_debug:
+            for _ in range(1, DebugManager.level):
+                self.level_up()
+            self.__potion = DebugManager.potion
+            self.__bom = DebugManager.bom
 
     def __hungry_by_move(self):
         if self.__satiation <= 0:
@@ -238,7 +245,6 @@ class Player(Event):
         self.__next_position = None
 
     def battle(self, target_enemy: object):
-        # 相互importとなるため、関数内部で型解決
         from model.event.enemy import Enemy
         enemy: Enemy = target_enemy
         damage = enemy.strength + random.randint(1, enemy.level + 5)
@@ -257,7 +263,7 @@ class Player(Event):
     def __add_strength(self, value: int):
         self.__strength += value
         if self.__strength > self.__limit_strength:
-            self.strength = self.__limit_strength
+            self.__strength = self.__limit_strength
 
     def __add_max_hp(self, value: int):
         self.__max_hp += value
@@ -276,7 +282,6 @@ class Player(Event):
         if self.__level >= self.__limit_level:
             return False
 
-        # 相互importとなるため、関数内部で型解決
         from model.event.enemy import Enemy
         enemy: Enemy = target_enemy
         return random.randint(0, enemy.max_hp) \
