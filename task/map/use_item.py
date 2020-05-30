@@ -119,9 +119,13 @@ class UseItem(Task):
     def __attack_bom_at_position(self, position: (int, int)):
 
         event_manager = self.__map_manager.event_manager
+        floor_map = self.__map_manager.dungeon.floor_map
         enemy_map = event_manager.enemy_map
         treasure_map = event_manager.treasure_map
         player = self.__map_manager.player
+
+        if not floor_map.is_in(position):
+            return
 
         enemy: Enemy = enemy_map[position]
         if enemy is not None:
@@ -140,6 +144,8 @@ class UseItem(Task):
         treasure_box: TreasureBox = treasure_map[position]
         if treasure_box is not None:
             event_manager.remove_treasure(treasure_box)
+
+        floor_map[position] = 0
 
     def get_next_task(self) -> Optional[Task]:
         return self.__next_task
