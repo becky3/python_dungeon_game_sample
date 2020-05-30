@@ -63,8 +63,8 @@ class Initialize(Task):
         game_system.play_music(Music.DUNGEON)
 
     def update(self):
-        from task.map.input_wait import InputWait
-        self.__next_task = InputWait(self.__map_manager)
+        from task.map.wait_input import WaitInput
+        self.__next_task = WaitInput(self.__map_manager)
 
     def draw(self):
         pass

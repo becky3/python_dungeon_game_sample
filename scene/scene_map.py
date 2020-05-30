@@ -1,49 +1,40 @@
+
+from game.game_system import GameSystem
+from game.game_info import GameInfo
 from scene.scene import Scene
 from task.task import Task
-from task.map.initialize import Initialize
 from task.map.scene_to_title import SceneToTitle
-from manager.map_manager import MapManager
 
 
 class SceneMap(Scene):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self,
+                 game_system: GameSystem,
+                 game_info: GameInfo,
+                 task: Task
+                 ):
+        super().__init__(
+            game_system,
+            game_info,
+            task
+        )
         self.__next_scene = None
-        self.__task: Task = None
-        self.__map_manager = MapManager()
 
     def start(self):
-
-        self.__task = Initialize(
-            super().game_system,
-            super().game_info,
-            self.__map_manager
-        )
-        self.__task.start()
+        pass
 
     def update(self):
+        super().update()
+
         from scene.scene_title import SceneTitle
-
-        self.__task.update()
-
-        next_task = self.__task.get_next_task()
-        if next_task is not None:
-            self.__task.exit()
-            task = next_task
-            self.__task = task
-            self.__map_manager.game_system.reset_timer()
-            task.start()
-            print("task:" + task.__class__.__name__)
-
-        if isinstance(next_task, SceneToTitle):
+        if isinstance(super().task, SceneToTitle):
             self.__next_scene = SceneTitle()
 
     def draw(self):
-        self.__task.draw()
+        super().draw()
 
     def exit(self):
-        pass
+        super().exit()
 
     def get_next_scene(self):
         return self.__next_scene

@@ -9,7 +9,7 @@ from task.task import Task
 from model.item import Item
 
 
-class InputWait(Task):
+class WaitInput(Task):
 
     def __init__(self, map_manager: MapManager):
         self.__map_manager = map_manager

@@ -28,11 +28,12 @@ def main():
         )
     )
 
-    scene: Scene = SceneTitle()
-    scene.initialize(game_system, game_info)
+    scene: Scene = SceneTitle(game_system, game_info)
     scene.start()
 
     while True:
+
+        game_system.progress()
 
         InputManager.updateEvents()
 
@@ -40,20 +41,18 @@ def main():
             game_system.quit()
             sys.exit()
 
-        game_system.progress()
         scene.update()
+        scene.draw()
+        game_system.update_display()
+
         next_scene = scene.get_next_scene()
         if next_scene is not None:
             scene.exit()
             scene = next_scene
-            scene.initialize(game_system, game_info)
             scene.start()
             print("scene:" + scene.__class__.__name__)
             game_system.reset_timer()
             continue
-
-        scene.draw()
-        game_system.update_display()
 
 
 if __name__ == '__main__':

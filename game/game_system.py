@@ -22,7 +22,7 @@ class GameSystem():
 
     def __init__(self):
         super().__init__()
-        self.__timer = 0
+        self.__timer = -1
         self.__speed = 1
         self.__display: pygame.display = None
         self.__sound_manager = SoundManager()
@@ -53,7 +53,7 @@ class GameSystem():
             self.__speed = 1
 
     def reset_timer(self):
-        self.__timer = 0
+        self.__timer = -1
 
     def progress(self):
         self.__timer += 1

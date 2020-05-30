@@ -13,20 +13,22 @@ class ChangeFloor(Task):
         self.__next_task: Task = None
 
     def start(self):
-        self.__map_manager.game_system.play_se(
+        mm = self.__map_manager
+        mm.game_system.play_se(
             SE.CHANGE_FLOOR
         )
+        mm.game_info.add_floor()
+        mm.init_floor()
 
     def update(self):
 
         if self.__map_manager.game_system.timer == 10:
-            from task.map.input_wait import InputWait
-            self.__next_task = InputWait(self.__map_manager)
+            from task.map.wait_input import WaitInput
+            self.__next_task = WaitInput(self.__map_manager)
 
     def draw(self):
         mm = self.__map_manager
         game_system = mm.game_system
-        game_info = mm.game_info
         timer = mm.game_system.timer
         one_height = 144 / 10
 
@@ -39,9 +41,7 @@ class ChangeFloor(Task):
                 Rect((0, 144-h), (144, h), is_absolute_position=True)
             )
         if timer == 5:
-            game_info.add_floor()
             mm.game_info.set_floor_info_view_time(15)
-            mm.init_floor()
         if 6 <= timer <= 9:
             h = one_height * (10 - timer)
             game_system.add_draw_object(

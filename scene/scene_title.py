@@ -1,69 +1,47 @@
-from const import Color, Key
 from scene.scene import Scene
-from scene.scene_map import SceneMap
-from manager.input_manager import InputManager
-from manager.sound_manager import Music, SE
-from model.draw_object.image import Image
-from model.draw_object.text import Text
+from task.title.initialize import Initialize
+from task.title.scene_to_map import SceneToMap
+from game.game_system import GameSystem
+from game.game_info import GameInfo
+from manager.title_manager import TitleManager
+from manager.map_manager import MapManager
+from task.map.initialize import Initialize as MapInitialize
 
 
 class SceneTitle(Scene):
 
-    __BLINK = [
-        (224, 255, 255),
-        (192, 240, 255),
-        (128, 224, 255),
-        (64, 192, 255),
-        (128, 224, 255),
-        (192, 240, 255)
-    ]
-
-    def __init__(self):
-        super().__init__()
+    def __init__(self,
+                 game_system: GameSystem,
+                 game_info: GameInfo):
+        title_manager = TitleManager(game_system, game_info)
+        task = Initialize(title_manager)
+        super().__init__(game_system, game_info, task)
         self.__next_scene: Scene = None
 
     def start(self):
-        super().game_system.play_music(Music.TITLE)
-        super().game_system.reset_camera()
+        super().start()
 
     def update(self):
-        if InputManager.isPush(Key.SPACE):
-            super().game_system.play_se(SE.CHANGE_FLOOR)
-            self.__next_scene = SceneMap()
+        super().update()
+
+        from scene.scene_map import SceneMap
+        if isinstance(super().task, SceneToMap):
+            task = MapInitialize(
+                super().game_system,
+                super().game_info,
+                MapManager()
+            )
+            self.__next_scene = SceneMap(
+                super().game_system,
+                super().game_info,
+                task
+            )
 
     def draw(self):
-        hi_score_floor = super().game_info.hi_score_floor
-        timer = super().game_system.timer
-
-        game_system = super().game_system
-        game_system.fill_display()
-        width, height = game_system.get_screen_size()
-
-        title_x = width / 2 - 64
-        title_y = height / 2 - 32
-
-        image = Image("resource/image/title.png", (title_x, title_y))
-        game_system.add_draw_object(image)
-
-        if hi_score_floor >= 2:
-            floor_text = "HI SCORE : B {} F".format(hi_score_floor)
-            game_system.add_draw_object(
-                Text(
-                    floor_text,
-                    (8, 8),
-                    Color.CYAN
-                )
-            )
-        game_system.add_draw_object(
-            Text(
-                "Press space key",
-                (24, 112),
-                self.__BLINK[timer % 6]
-            )
-        )
+        super().draw()
 
     def exit(self):
-        print("title end")
+        super().exit()
 
     def get_next_scene(self):
         return self.__next_scene
