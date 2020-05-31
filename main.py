@@ -3,6 +3,7 @@ import sys
 from game.game_system import GameSystem
 from game.game_info import GameInfo
 from manager.input_manager import InputManager
+from manager.debug_manager import DebugManager
 from scene.scene import Scene
 from scene.scene_title import SceneTitle
 
@@ -50,7 +51,7 @@ def main():
             scene.exit()
             scene = next_scene
             scene.start()
-            print("scene:" + scene.__class__.__name__)
+            DebugManager.print("scene:" + scene.__class__.__name__)
             game_system.reset_timer()
             continue
 
