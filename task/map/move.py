@@ -28,7 +28,7 @@ class Move(Task):
         if player.is_moving():
             return
 
-        if player.is_die():
+        if player.stats.is_die():
             from task.map.game_over import GameOver
             self.__next_task = GameOver(self.__map_manager)
             return

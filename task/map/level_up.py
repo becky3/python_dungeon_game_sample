@@ -19,7 +19,7 @@ class LevelUp(Task):
         mm.game_system.play_se(
             SE.LEVEL_UP
         )
-        mm.player.level_up()
+        mm.player.stats.level_up()
         mm.player.set_direction(Direction.DOWN)
 
     def update(self):

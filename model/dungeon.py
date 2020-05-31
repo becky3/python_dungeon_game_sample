@@ -8,10 +8,9 @@ from model.draw_object.image import Image
 from model.chip import Chip
 
 
-class FloorPattern:
+class FloorType:
     FLOOR = 0
-    WALL = 1
-    WALL2 = 2
+    WALL = 9
 
 
 class Dungeon:
@@ -19,95 +18,109 @@ class Dungeon:
     __IMAGE = "resource/image/floor.png"
     __CHIP = Chip((16, 16), (16 * 8, 16 * 8))
 
+    class FloorImageType:
+        FLOOR = 0
+        WALL1 = 1
+        WALL2 = 2
+
+    @property
+    def floor_map(self) -> Matrix:
+        return self.__floor_map
+
+    @property
+    def room_size(self) -> int:
+        return self.__room_size
+
     def __init__(self,
                  game_info: GameInfo,
-                 maze_height: int,
-                 maze_width: int,
-                 room_size: int,
+                 base_size: (int, int),
+                 room_size: int
                  ):
         self.__game_info = game_info
-        self.maze = self.__get_maze(maze_height, maze_width)
-        self.room_size = room_size
-        self.floor_map = Matrix()
+        self.__base_size = base_size
+        self.__room_size = room_size
+        self.__floor_map = Matrix()
 
-    def __get_maze(self, height: int, width: int) -> Matrix:
-        maze = Matrix(height, width)
+    def __get_base_map(self) -> Matrix:
+        height, width = self.__base_size
+        base_map = Matrix(height, width)
 
         XP = [0, 1, 0, -1]
         YP = [-1, 0, 1, 0]
 
-        # 周りの壁
+        FLOOR = FloorType.FLOOR
+        WALL = FloorType.WALL
+
         for x in range(width):
-            maze[0, x] = 1
-            maze[height-1, x] = 1
+            base_map[0, x] = WALL
+            base_map[height-1, x] = WALL
 
         for y in range(1, height-1):
-            maze[y, 0] = 1
-            maze[y, width-1] = 1
+            base_map[y, 0] = WALL
+            base_map[y, width-1] = WALL
 
-        # 中を何もない状態に
         for y in range(1, height-1):
             for x in range(1, width-1):
-                maze[y, x] = 0
+                base_map[y, x] = FLOOR
 
-        # 柱
         for y in range(2, height-2, 2):
             for x in range(2, width-2, 2):
-                maze[y, x] = 1
+                base_map[y, x] = WALL
 
-        # 柱から上下左右に壁を作る
         for y in range(2, height-2, 2):
             for x in range(2, width-2, 2):
                 d = random.randint(0, 3)
-            if x > 2:  # 二列目からは左に壁を作らない
+            if x > 2:
                 d = random.randint(0, 2)
-            maze[y+YP[d], x+XP[d]] = 1
+            base_map[y+YP[d], x+XP[d]] = WALL
 
-        return maze
+        return base_map
 
-    def create(self):  # ダンジョンの自動生成
+    def create_floor_map(self):
 
-        maze = self.maze
-        room_size = self.room_size
+        base_size = self.__base_size
+        room_size = self.__room_size
+        base_map = self.__get_base_map()
 
-        maze_height, maze_width = maze.shape
-        height = maze_height * room_size
-        width = maze_width * room_size
+        base_height, base_width = base_size
+        height = base_height * room_size
+        width = base_width * room_size
 
         floor_map = Matrix(height, width)
 
-        # 迷路からダンジョンを作る
-        # 全体を壁にする
+        FLOOR = FloorType.FLOOR
+        WALL = FloorType.WALL
+
         for y in range(height):
             for x in range(width):
-                floor_map[y, x] = 9
-        # 部屋と通路の配置
-        for y in range(1, maze_height-1):
-            for x in range(1, maze_width-1):
+                floor_map[y, x] = WALL
+
+        for y in range(1, base_height-1):
+            for x in range(1, base_width-1):
                 dx = x*room_size+1
                 dy = y*room_size+1
-                if maze[y, x] == 0:
-                    if random.randint(0, 99) < 20:  # 部屋を作る
+                if base_map[y, x] == FLOOR:
+                    if random.randint(0, 99) < 20:
                         for ry in range(-1, room_size-1):
                             for rx in range(-1, room_size-1):
-                                floor_map[dy+ry, dx+rx] = 0
-                    else:  # 通路を作る
-                        floor_map[dy, dx] = 0
+                                floor_map[dy+ry, dx+rx] = FLOOR
+                    else:
+                        floor_map[dy, dx] = FLOOR
                         road_size = math.floor(room_size/2) + 1
-                        if maze[y-1, x] == 0:
+                        if base_map[y-1, x] == FLOOR:
                             for ry in range(1, road_size):
-                                floor_map[dy-ry, dx] = 0
-                        if maze[y+1, x] == 0:
+                                floor_map[dy-ry, dx] = FLOOR
+                        if base_map[y+1, x] == FLOOR:
                             for ry in range(1, road_size):
-                                floor_map[dy+ry, dx] = 0
-                        if maze[y, x-1] == 0:
+                                floor_map[dy+ry, dx] = FLOOR
+                        if base_map[y, x-1] == FLOOR:
                             for rx in range(1, road_size):
-                                floor_map[dy, dx-rx] = 0
-                        if maze[y, x+1] == 0:
+                                floor_map[dy, dx-rx] = FLOOR
+                        if base_map[y, x+1] == FLOOR:
                             for rx in range(1, road_size):
-                                floor_map[dy, dx+rx] = 0
+                                floor_map[dy, dx+rx] = FLOOR
 
-        self.floor_map = floor_map
+        self.__floor_map = floor_map
 
     def __get_image(self, index: int, position: (int, int)) -> Image:
         converted_position = self.__game_info.convert_map_to_display(
@@ -124,8 +137,8 @@ class Dungeon:
              center: (int, int)
              ):
 
-        height, width = self.floor_map.shape
-        floor_map = self.floor_map
+        height, width = self.__floor_map.shape
+        floor_map = self.__floor_map
         center_y, center_x = center
         screen_rows = self.__game_info.screen_chip_rows
         screen_columns = self.__game_info.screen_chip_columns
@@ -133,6 +146,9 @@ class Dungeon:
         y_range = range(-y_value, y_value)
         x_value = math.ceil(screen_columns / 2) + 1
         x_range = range(-x_value, x_value)
+
+        WALL = FloorType.WALL
+        FLOOR = FloorType.FLOOR
 
         game_system.fill_display()
         for around_y in y_range:
@@ -142,22 +158,23 @@ class Dungeon:
                 if not floor_map.is_in((map_y, map_x)):
                     continue
 
-                if floor_map[map_y, map_x] <= 3:
+                if floor_map[map_y, map_x] == FLOOR:
                     floor = self.__get_image(
-                        FloorPattern.FLOOR,
+                        Dungeon.FloorImageType.FLOOR,
                         (map_x, map_y)
                     )
                     game_system.add_draw_object(floor)
 
-                if floor_map[map_y, map_x] == 9:
+                if floor_map[map_y, map_x] == WALL:
                     wall2 = self.__get_image(
-                        FloorPattern.WALL2,
+                        Dungeon.FloorImageType.WALL2,
                         (map_x, map_y)
                     )
                     game_system.add_draw_object(wall2)
-                    if map_y < height - 1 and floor_map[map_y+1, map_x] == 9:
+                    if map_y < height - 1 \
+                            and floor_map[map_y+1, map_x] == WALL:
                         wall = self.__get_image(
-                            FloorPattern.WALL,
+                            Dungeon.FloorImageType.WALL1,
                             (map_x, map_y)
                         )
                         game_system.add_draw_object(wall)

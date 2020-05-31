@@ -10,7 +10,7 @@ from model.event.enemy import Enemy
 from model.event.treasure_box import TreasureBox
 from model.event.stairs import Stairs
 from model.event.player import Player
-from model.dungeon import Dungeon
+from model.dungeon import Dungeon, FloorType
 
 
 class EventManager:
@@ -39,7 +39,6 @@ class EventManager:
         self.__treasure_map = Matrix()
         self.__stair: Stairs = None
 
-    # is_dieをまとめて削除する
     def remove_enemy(self, event: Event):
         self.__enemy_map[event.map_coordinate] = None
 
@@ -78,12 +77,12 @@ class EventManager:
         while True:
             x = random.randint(3, width - 4)
             y = random.randint(3, height - 4)
-            if floor_map[y, x] != 0:
+            if floor_map[y, x] == FloorType.WALL:
                 continue
             area_size = math.floor(room_size / 2) + 1
             for ry in range(-area_size, area_size):
                 for rx in range(-area_size, area_size):
-                    floor_map[y+ry, x+rx] = 0
+                    floor_map[y+ry, x+rx] = FloorType.FLOOR
             self.__stair = Stairs((y, x), self.__game_system, self.__game_info)
             break
 
@@ -91,7 +90,7 @@ class EventManager:
                             dungeon: Dungeon,
                             position: (int, int)) -> bool:
         y, x = position
-        if dungeon.floor_map[y, x] != 0:
+        if dungeon.floor_map[y, x] == FloorType.WALL:
             return False
         if self.__enemy_map[y, x] is not None:
             return False

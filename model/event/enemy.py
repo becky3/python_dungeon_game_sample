@@ -9,7 +9,7 @@ from libs.matrix import Matrix
 from const import Direction, Color
 from game.game_info import GameInfo
 from game.game_system import GameSystem
-from model.dungeon import Dungeon
+from model.dungeon import Dungeon, FloorType
 from model.item import Item
 from model.mover import Mover
 from model.character_chip import CharacterChip
@@ -18,6 +18,7 @@ from model.event.player import Player
 from model.draw_object.image import Image
 from model.draw_object.text import Text
 from model.draw_object.rect import Rect
+from model.stats import Stats
 from manager.debug_manager import DebugManager
 
 
@@ -27,24 +28,8 @@ class Enemy(Event):
     __MAX_ENEMY_TYPE = 10
 
     @property
-    def level(self) -> int:
-        return self.__level
-
-    @property
-    def name(self) -> int:
-        return self.__name
-
-    @property
-    def max_hp(self) -> int:
-        return self.__max_hp
-
-    @property
-    def hp(self) -> int:
-        return self.__hp
-
-    @property
-    def strength(self) -> int:
-        return self.__strength
+    def stats(self) -> Stats:
+        return self.__stats
 
     @property
     def next_position(self) -> (int, int):
@@ -88,19 +73,27 @@ class Enemy(Event):
         if max_enemy_type > self.__MAX_ENEMY_TYPE - 1:
             max_enemy_type = self.__MAX_ENEMY_TYPE - 1
         self.type = random.randint(0, max_enemy_type)
-        min_level = math.ceil(floor / 2)
-        self.__level = random.randint(min_level, floor)
-        self.__name = str(self.level)
-        self.__max_hp = 60 * \
-            (self.type + math.ceil(self.level / 2)) + \
-            (self.level - 1) * 10
-        self.__hp = self.max_hp
-        self.__strength = math.ceil(self.max_hp/8)
-        self.__debug_text = "{}".format(self.__max_hp)
+        self.__stats = self.__get_default_stats()
 
+        self.__debug_text = "{}".format(self.__stats.max_hp)
         self.__character_chip.set_character_no(self.type)
-        self.__pre_damage = 0
         self.__damage_view_time = 0
+
+    def __get_default_stats(self) -> Stats:
+
+        floor = self.__game_info.floor
+        min_level = math.ceil(floor / 2)
+        level = random.randint(min_level, floor)
+        max_hp = 60 * \
+            (self.type + math.ceil(level / 2)) + \
+            (level - 1) * 10
+        strength = math.ceil(max_hp / 8)
+
+        return Stats(
+            level=level,
+            max_hp=max_hp,
+            strength=strength
+        )
 
     def __can_move(self, position: (int, int)) -> bool:
 
@@ -112,7 +105,7 @@ class Enemy(Event):
 
         y, x = position
 
-        if floor_map[y, x] > 3:
+        if floor_map[y, x] == FloorType.WALL:
             return False
 
         if event_map[y, x] is not None:
@@ -152,22 +145,13 @@ class Enemy(Event):
         return (y - player_y, x - player_x)
 
     def battle(self):
-        damage = self.__player.strength
-        + random.randint(1, math.floor(self.__player.level * 1.2) + 5)
-        self.add_hp(-damage)
-        self.__pre_damage = damage
+        damage = self.__player.stats.strength
+        + random.randint(
+            1,
+            math.floor(self.__player.stats.level * 1.2) + 5
+        )
+        self.stats.damage(damage)
         self.__damage_view_time = 10
-
-    def add_hp(self, value: int):
-        self.__hp += value
-        if self.__hp < 0:
-            self.__hp = 0
-
-        if self.__hp > self.__max_hp:
-            self.__hp = self.__max_hp
-
-    def is_die(self) -> bool:
-        return self.hp <= 0
 
     def get_item(self) -> Optional[Item]:
 
@@ -232,9 +216,7 @@ class Enemy(Event):
         x = position[0] + 1
         y = position[1] - (y_adjust + height)
         max_width = width - border_size * 2
-        hp = math.ceil(self.hp / self.max_hp * max_width)
-        if hp < 0:
-            hp = 0
+        hp = math.ceil(self.stats.hp / self.stats.max_hp * max_width)
         game_system.add_draw_object(
             Rect(
                 (x, y),
@@ -262,7 +244,7 @@ class Enemy(Event):
         game_system = self.__game_system
         x = position[0]
         y = position[1] + self.height - 8
-        text = self.name
+        text = str(self.stats.level)
         if DebugManager.is_debug:
             text += " " + self.__debug_text
 
@@ -292,7 +274,7 @@ class Enemy(Event):
         y = position[1] + self.height - 48 + adjust
 
         text = Text(
-            str(self.__pre_damage),
+            str(self.stats.pre_damage),
             (x, y),
             Color.WHITE,
             font_size=Text.FontSize.NORMAL,

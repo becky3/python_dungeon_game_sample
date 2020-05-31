@@ -7,6 +7,7 @@ from model.item import Item
 from model.draw_object.image import Image
 from model.event.enemy import Enemy
 from model.event.treasure_box import TreasureBox
+from model.dungeon import FloorType
 
 
 class UseItem(Task):
@@ -129,9 +130,9 @@ class UseItem(Task):
 
         enemy: Enemy = enemy_map[position]
         if enemy is not None:
-            enemy.add_hp(-1000)
+            enemy.stats.damage(1000)
 
-            if enemy.is_die():
+            if enemy.stats.is_die():
                 event_manager.remove_enemy(enemy)
                 item = enemy.get_item()
 
@@ -145,7 +146,7 @@ class UseItem(Task):
         if treasure_box is not None:
             event_manager.remove_treasure(treasure_box)
 
-        floor_map[position] = 0
+        floor_map[position] = FloorType.FLOOR
 
     def get_next_task(self) -> Optional[Task]:
         return self.__next_task

@@ -4,6 +4,7 @@ from typing import Optional
 from game.game_system import GameSystem
 from game.game_info import GameInfo
 from task.task import Task
+from manager.debug_manager import DebugManager
 
 
 class Scene(ABC):
@@ -39,7 +40,7 @@ class Scene(ABC):
         task = self.__task
 
         if game_system.timer == 0:
-            print("new task:" + task.__class__.__name__)
+            DebugManager.print("new task:" + task.__class__.__name__)
             task.start()
             return
 
@@ -49,7 +50,7 @@ class Scene(ABC):
         if next_task is not None:
             task.draw()
             task.exit()
-            print("end task:" + task.__class__.__name__)
+            DebugManager.print("end task:" + task.__class__.__name__)
             self.__task = next_task
             game_system.reset_timer()
 
