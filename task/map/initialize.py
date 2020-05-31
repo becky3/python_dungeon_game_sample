@@ -29,8 +29,7 @@ class Initialize(Task):
 
         dungeon = Dungeon(
             game_info=game_info,
-            maze_height=9,
-            maze_width=11,
+            base_size=(9, 11),
             room_size=3
         )
 
