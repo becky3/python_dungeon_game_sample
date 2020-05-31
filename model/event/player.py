@@ -5,7 +5,7 @@ from game.game_info import GameInfo
 from game.game_system import GameSystem
 from model.item import Item
 from model.mover import Mover
-from model.dungeon import Dungeon
+from model.dungeon import Dungeon, FloorType
 from model.draw_object.text import Text
 from model.draw_object.image import Image
 from model.character_chip import CharacterChip
@@ -102,7 +102,7 @@ class Player(Event):
             y = random.randint(3, height - 4)
             x = random.randint(3, width - 4)
             self.set_position((y, x))
-            if floor_map[y, x] == 0:
+            if floor_map[y, x] == FloorType.FLOOR:
                 break
         self.__direction = Direction.DOWN
 
@@ -127,7 +127,7 @@ class Player(Event):
         if not floor_map.is_in(next_position):
             return False
 
-        if floor_map[next_position] == 9:
+        if floor_map[next_position] == FloorType.WALL:
             return False
 
         return True

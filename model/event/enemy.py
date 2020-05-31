@@ -9,7 +9,7 @@ from libs.matrix import Matrix
 from const import Direction, Color
 from game.game_info import GameInfo
 from game.game_system import GameSystem
-from model.dungeon import Dungeon
+from model.dungeon import Dungeon, FloorType
 from model.item import Item
 from model.mover import Mover
 from model.character_chip import CharacterChip
@@ -105,7 +105,7 @@ class Enemy(Event):
 
         y, x = position
 
-        if floor_map[y, x] > 3:
+        if floor_map[y, x] == FloorType.WALL:
             return False
 
         if event_map[y, x] is not None:
